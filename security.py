@@ -50,7 +50,7 @@ class CommandNormalizer:
                 command="",
                 argument="",
                 is_valid=False,
-                error_message="Messaggio vuoto o non testuale.",
+                error_message=t("telegram_empty_message"),
             )
 
         raw = text.strip()
@@ -65,7 +65,7 @@ class CommandNormalizer:
                 command="",
                 argument="",
                 is_valid=False,
-                error_message="Nessun comando identificato.",
+                error_message=t("telegram_no_command"),
             )
 
         # Support 'note:<text>' or 'note <text>' with free-form text, spaces and formatting
@@ -79,7 +79,7 @@ class CommandNormalizer:
                     command="note",
                     argument="",
                     is_valid=False,
-                    error_message="Inserisci il testo della nota dopo 'note:'. Esempio: note: ricordami la riunione",
+                error_message=t("telegram_note_empty_arg"),
                 )
             return NormalizedCommand(
                 raw_text=raw,
@@ -94,7 +94,7 @@ class CommandNormalizer:
                 command="note",
                 argument="",
                 is_valid=False,
-                error_message="Inserisci il testo della nota dopo 'note:'. Esempio: note: ricordami la riunione",
+                error_message=t("telegram_note_empty_arg"),
             )
 
         cmd_name = parts[0].lower()
@@ -107,7 +107,7 @@ class CommandNormalizer:
                 command=cmd_name,
                 argument=arg,
                 is_valid=False,
-                error_message="Troppi argomenti. I comandi non accettano parametri arbitrari.",
+                error_message=t("telegram_too_many_args"),
             )
 
         if len(parts) == 2 and cmd_name != "panic":
@@ -116,7 +116,7 @@ class CommandNormalizer:
                 command=cmd_name,
                 argument=arg,
                 is_valid=False,
-                error_message=f"Il comando '{cmd_name}' non accetta argomenti aggiuntivi.",
+                error_message=t("telegram_no_extra_args", cmd=cmd_name),
             )
 
         return NormalizedCommand(
@@ -177,26 +177,21 @@ class PanicConfirmationTracker:
         with self._lock:
             self._pending_user_id = user_id
             self._request_timestamp = time.time()
-        return (
-            "⚠️ *ATTENZIONE*: Il comando `/panic` chiuderà le applicazioni utente aperte "
-            "e potrebbe causare la perdita di dati non salvati.\n\n"
-            "Per confermare l'operazione, invia entro 15 secondi:\n"
-            "`/panic conferma`"
-        )
+        return t("telegram_panic_prompt")
 
     def is_confirmed(self, user_id: int, argument: str) -> Tuple[bool, Optional[str]]:
         now = time.time()
         with self._lock:
             if self._pending_user_id != user_id:
-                return False, "Nessuna richiesta di panic in sospeso. Invia prima `/panic`."
+                return False, t("telegram_panic_no_pending")
 
             elapsed = now - self._request_timestamp
             if elapsed > self._timeout_seconds:
                 self._pending_user_id = None
-                return False, f"Richiesta di panic scaduta ({elapsed:.1f}s > {self._timeout_seconds}s). Invia nuovamente `/panic`."
+                return False, t("telegram_panic_expired", elapsed=elapsed, timeout=self._timeout_seconds)
 
-            if argument != "conferma":
-                return False, "Argomento non valido. Per confermare invia esattamente: `/panic conferma`."
+            if argument not in ("conferma", "confirm"):
+                return False, t("telegram_panic_invalid_arg")
 
             # Successfully confirmed; reset state
             self._pending_user_id = None
@@ -237,13 +232,13 @@ class SecurityGateway:
         master_id_str = self._get_master_user_id()
         if not master_id_str:
             logger.warning(t("log_sec_master_unconfigured"))
-            return False, "❌ Master User ID non configurato sul computer locale."
+            return False, t("telegram_master_unconfigured")
 
         try:
             expected_master_id = int(master_id_str.strip())
         except ValueError:
             logger.error(t("log_sec_master_invalid_int"))
-            return False, "❌ Configurazione Master User ID locale non valida."
+            return False, t("telegram_master_invalid")
 
         if user_id is None or user_id != expected_master_id:
             preview = (raw_message or "")[:MAX_LOG_MESSAGE_PREVIEW_LEN]
@@ -251,6 +246,6 @@ class SecurityGateway:
             logger.warning(
                 t("log_sec_unauthorized_access", user_id=user_id, username=user_display, preview=preview)
             )
-            return False, "⛔ Accesso negato: Utente non autorizzato."
+            return False, t("telegram_unauthorized")
 
         return True, None

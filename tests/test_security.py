@@ -17,9 +17,9 @@ from security import (
 def test_command_normalizer_valid():
     """Tests case-insensitivity, stripping of spaces, and '/' prefix removal."""
     cases = [
-        ("spegni", "spegni", ""),
-        ("SPEGNI", "spegni", ""),
-        ("  /spegni  ", "spegni", ""),
+        ("shutdown", "shutdown", ""),
+        ("SHUTDOWN", "shutdown", ""),
+        ("  /shutdown  ", "shutdown", ""),
         ("/STATUS", "status", ""),
         ("  /ping  ", "ping", ""),
         ("/panic conferma", "panic", "conferma"),
@@ -43,7 +43,7 @@ def test_command_normalizer_rejections():
         "   ",
         None,
         "/exec shutdown /s",
-        "/spegni now",
+        "/shutdown now",
         "/firefox --incognito",
         "/panic conferma extra_arg",
         "note:",
@@ -61,21 +61,21 @@ def test_anti_duplicate_filter():
     user_id = 12345
 
     # 1. First execution must be allowed
-    assert filter_.is_duplicate(user_id, "spegni") is False
+    assert filter_.is_duplicate(user_id, "shutdown") is False
 
     # 2. Immediate duplicate must be rejected
-    assert filter_.is_duplicate(user_id, "spegni") is True
-    assert filter_.is_duplicate(user_id, "SPEGNI") is True
+    assert filter_.is_duplicate(user_id, "shutdown") is True
+    assert filter_.is_duplicate(user_id, "SHUTDOWN") is True
 
     # 3. Different command for the same user is allowed
     assert filter_.is_duplicate(user_id, "ping") is False
 
     # 4. Same command for different user is allowed
-    assert filter_.is_duplicate(99999, "spegni") is False
+    assert filter_.is_duplicate(99999, "shutdown") is False
 
     # 5. After window expires, original command is accepted again
     time.sleep(1.05)
-    assert filter_.is_duplicate(user_id, "spegni") is False
+    assert filter_.is_duplicate(user_id, "shutdown") is False
 
 
 def test_security_gateway_master_authorization():
@@ -84,27 +84,27 @@ def test_security_gateway_master_authorization():
     gateway = SecurityGateway(get_master_user_id_fn=lambda: master_id)
 
     # 1. Authorized Master ID
-    authorized, err = gateway.verify_authorization(12345678, "boss", "/spegni")
+    authorized, err = gateway.verify_authorization(12345678, "boss", "/shutdown")
     assert authorized is True
     assert err is None
 
     # 2. Unauthorized User ID
-    unauthorized, err = gateway.verify_authorization(99999999, "stranger", "/spegni")
+    unauthorized, err = gateway.verify_authorization(99999999, "stranger", "/shutdown")
     assert unauthorized is False
-    assert "non autorizzato" in err.lower()
+    assert "denied" in err.lower()
 
     # 3. None user ID
-    none_user, err = gateway.verify_authorization(None, None, "/spegni")
+    none_user, err = gateway.verify_authorization(None, None, "/shutdown")
     assert none_user is False
-    assert "non autorizzato" in err.lower()
+    assert "denied" in err.lower()
 
 
 def test_security_gateway_missing_master_config():
     """Verifies that if master ID is not configured locally, all requests are rejected."""
     gateway = SecurityGateway(get_master_user_id_fn=lambda: None)
-    authorized, err = gateway.verify_authorization(12345678, "boss", "/spegni")
+    authorized, err = gateway.verify_authorization(12345678, "boss", "/shutdown")
     assert authorized is False
-    assert "non configurato" in err.lower()
+    assert "not configured" in err.lower()
 
 
 def test_panic_confirmation_tracker():
@@ -118,7 +118,7 @@ def test_panic_confirmation_tracker():
 
     # Request panic
     msg = tracker.request_panic(user_id)
-    assert "ATTENZIONE" in msg
+    assert "ATTENTION" in msg
 
     # Invalid confirmation argument
     confirmed, err = tracker.is_confirmed(user_id, "si")
@@ -139,7 +139,7 @@ def test_panic_confirmation_tracker():
     time.sleep(0.55)
     confirmed, err = tracker.is_confirmed(user_id, "conferma")
     assert confirmed is False
-    assert "scaduta" in err.lower()
+    assert "expired" in err.lower()
 
 
 @pytest.mark.asyncio
@@ -157,7 +157,7 @@ async def test_central_dispatcher_blocks_unauthorized_before_handler():
     bot_manager = TelegramBotManager(gui_queue=q)
 
     # Mock gateway returning unauthorized
-    bot_manager.security_gateway.verify_authorization = MagicMock(return_value=(False, "Accesso negato"))
+    bot_manager.security_gateway.verify_authorization = MagicMock(return_value=(False, "Access denied"))
 
     # Handler mock
     handler_mock = MagicMock()
@@ -165,7 +165,7 @@ async def test_central_dispatcher_blocks_unauthorized_before_handler():
     # Fake update from unauthorized user
     mock_update = MagicMock()
     mock_update.message = MagicMock()
-    mock_update.message.text = "/spegni"
+    mock_update.message.text = "/shutdown"
     mock_update.message.reply_text = AsyncMock()
     mock_update.effective_user.id = 999999
     mock_update.effective_user.username = "hacker"
@@ -176,5 +176,5 @@ async def test_central_dispatcher_blocks_unauthorized_before_handler():
     # Verify that handler was NEVER called
     handler_mock.assert_not_called()
     # Verify denial message sent
-    mock_update.message.reply_text.assert_called_once_with("Accesso negato")
+    mock_update.message.reply_text.assert_called_once_with("Access denied")
 

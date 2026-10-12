@@ -120,14 +120,9 @@ def execute_panic() -> CommandResult:
     # Give processes a brief moment to gracefully exit, then force kill any remaining
     time.sleep(0.5)
 
-    msg = (
-        f"🚨 *PROCEDURA PANIC COMPLETATA*\n"
-        f"━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-        f"📉 Processi utente chiusi: `{terminated_count}`\n"
-        f"🛡️ Processi di sistema protetti: Salvaguardati\n"
-    )
+    msg = t("telegram_panic_done", count=terminated_count)
     if denied_count > 0:
-        msg += f"⚠️ Processi protetti da permessi elevati: `{denied_count}`\n"
+        msg += t("telegram_panic_denied", count=denied_count)
 
     log_msg = t("log_msg_panic_done", terminated=terminated_count, denied=denied_count)
     return CommandResult(

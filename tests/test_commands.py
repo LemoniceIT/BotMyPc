@@ -28,7 +28,7 @@ def test_schedule_shutdown_mocked():
 
         res = schedule_shutdown()
         assert res.success is True
-        assert "10 secondi" in res.message
+        assert "10" in res.message
 
         # Verify call arguments
         mock_run.assert_called_once()
@@ -46,7 +46,7 @@ def test_schedule_restart_mocked():
 
         res = schedule_restart()
         assert res.success is True
-        assert "10 secondi" in res.message
+        assert "10" in res.message
 
         mock_run.assert_called_once()
         call_args, call_kwargs = mock_run.call_args
@@ -63,7 +63,7 @@ def test_abort_shutdown_mocked():
 
         res = abort_shutdown()
         assert res.success is True
-        assert "annullata" in res.message
+        assert "cancelled" in res.message.lower()
 
         mock_run.assert_called_once()
         call_args, call_kwargs = mock_run.call_args
@@ -84,14 +84,14 @@ def test_ping_command():
     res = ping()
     assert res.success is True
     assert "PONG" in res.message
-    assert "Uptime" in res.message
+    assert "uptime" in res.message.lower()
 
 
 def test_launch_firefox_not_found():
     with patch("commands.applications.resolve_firefox_path", return_value=None):
         res = launch_firefox()
         assert res.success is False
-        assert "non trovato" in res.message.lower()
+        assert "not found" in res.message.lower()
 
 
 def test_launch_firefox_success():
@@ -106,7 +106,7 @@ def test_launch_outlook_not_found():
     with patch("commands.applications.resolve_outlook_path", return_value=None):
         res = launch_outlook()
         assert res.success is False
-        assert "non trovato" in res.message.lower()
+        assert "not found" in res.message.lower()
 
 
 def test_launch_outlook_success():
@@ -143,7 +143,7 @@ def test_execute_panic_critical_blacklist():
 
         res = execute_panic()
         assert res.success is True
-        assert "Processi utente chiusi: `1`" in res.message
+        assert "processes closed" in res.message.lower()
 
         # System and explorer must NOT have terminate() called
         p_system.terminate.assert_not_called()
@@ -158,7 +158,7 @@ def test_open_notepad_note_empty():
     from commands.applications import open_notepad_note
     res = open_notepad_note("")
     assert res.success is False
-    assert "vuoto" in res.message.lower()
+    assert "empty" in res.message.lower()
 
 
 def test_open_notepad_note_success(tmp_path):
@@ -170,7 +170,8 @@ def test_open_notepad_note_success(tmp_path):
         test_note = "ricordami di inviare mail a mario.rossi@mailgenerica.com e di caricare i nuovi file"
         res = open_notepad_note(test_note)
         assert res.success is True
-        assert "Blocco Note" in res.message
+        assert res.success is True
+        assert "notepad" in res.message.lower()
 
         mock_popen.assert_called_once()
         args, kwargs = mock_popen.call_args

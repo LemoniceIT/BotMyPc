@@ -114,7 +114,7 @@ def launch_firefox() -> CommandResult:
         logger.warning(t("log_firefox_not_found"))
         return CommandResult(
             success=False,
-            message="❌ Firefox non trovato sul sistema.",
+            message=t("telegram_firefox_not_found"),
             log_message=t("log_msg_firefox_not_found"),
         )
 
@@ -123,14 +123,14 @@ def launch_firefox() -> CommandResult:
         subprocess.Popen([exe], close_fds=True)
         return CommandResult(
             success=True,
-            message="🌐 Avvio di Mozilla Firefox completato.",
+            message=t("telegram_firefox_launched"),
             log_message=t("log_msg_firefox_launched", exe=exe),
         )
     except Exception as e:
         logger.exception(t("log_firefox_start_error", exe=exe))
         return CommandResult(
             success=False,
-            message=f"❌ Errore durante l'avvio di Firefox: {str(e)}",
+            message=t("telegram_firefox_error", e=str(e)),
             log_message=t("log_msg_firefox_error", e=e),
         )
 
@@ -142,7 +142,7 @@ def launch_outlook() -> CommandResult:
         logger.warning(t("log_outlook_not_found"))
         return CommandResult(
             success=False,
-            message="❌ Outlook non trovato sul sistema.",
+            message=t("telegram_outlook_not_found"),
             log_message=t("log_msg_outlook_not_found"),
         )
 
@@ -151,14 +151,14 @@ def launch_outlook() -> CommandResult:
         subprocess.Popen([exe], close_fds=True)
         return CommandResult(
             success=True,
-            message="📧 Avvio di Microsoft Outlook completato.",
+            message=t("telegram_outlook_launched"),
             log_message=t("log_msg_outlook_launched", exe=exe),
         )
     except Exception as e:
         logger.exception(t("log_outlook_start_error", exe=exe))
         return CommandResult(
             success=False,
-            message=f"❌ Errore durante l'avvio di Outlook: {str(e)}",
+            message=t("telegram_outlook_error", e=str(e)),
             log_message=t("log_msg_outlook_error", e=e),
         )
 
@@ -171,7 +171,7 @@ def open_notepad_note(note_text: str) -> CommandResult:
     if not cleaned:
         return CommandResult(
             success=False,
-            message="❌ Il testo della nota non può essere vuoto.",
+            message=t("telegram_note_empty_msg"),
             log_message=t("log_msg_note_empty"),
         )
 
@@ -193,11 +193,7 @@ def open_notepad_note(note_text: str) -> CommandResult:
         subprocess.Popen([notepad_exe, str(note_file.resolve())], close_fds=True)
 
         preview = cleaned[:50] + ("..." if len(cleaned) > 50 else "")
-        msg = (
-            "📝 *Blocco Note aperto sul PC!*\n"
-            f"📄 Contenuto: _{preview}_\n"
-            f"📁 Salvato in: `{note_file.name}`"
-        )
+        msg = t("telegram_note_opened", preview=preview, filename=note_file.name)
         return CommandResult(
             success=True,
             message=msg,
@@ -207,6 +203,6 @@ def open_notepad_note(note_text: str) -> CommandResult:
         logger.exception(t("log_notepad_note_error"))
         return CommandResult(
             success=False,
-            message=f"❌ Errore durante l'apertura di Notepad: {str(e)}",
+            message=t("telegram_notepad_error", e=str(e)),
             log_message=t("log_msg_note_error", e=e),
         )

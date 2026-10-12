@@ -151,12 +151,7 @@ class OutlookMailMonitor:
                             if any(kw.lower() in subject.lower() for kw in self.keywords):
                                 sender = getattr(mail, "SenderName", "unknown")
                                 time_str = received.Format("%Y-%m-%d %H:%M") if received else ""
-                                msg = (
-                                    f"📧 *Nuova mail* ({folder_name})\n"
-                                    f"*Mittente*: {sender}\n"
-                                    f"*Oggetto*: {subject}\n"
-                                    f"*Orario*: {time_str}"
-                                )
+                                msg = t("telegram_mail_notification", folder=folder_name, sender=sender, subject=subject, time=time_str)
                                 logger.info(t("log_mail_keyword_match", folder=folder_name, subject=subject[:MAX_LOG_MESSAGE_PREVIEW_LEN]))
                                 if self.bot_manager:
                                     sent = self.bot_manager.send_message(msg)

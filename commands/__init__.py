@@ -4,6 +4,7 @@ Registers all commands with metadata into the central REGISTRY.
 """
 
 from command_registry import CommandDefinition, REGISTRY
+from i18n import t
 from commands.system import (
     schedule_shutdown,
     schedule_restart,
@@ -21,51 +22,51 @@ def register_all_commands() -> None:
     """Registers all built-in commands into the global registry."""
     # System commands
     REGISTRY.register(CommandDefinition(
-        name="spegni",
+        name="shutdown",
         handler=schedule_shutdown,
-        description="Programma lo spegnimento del PC tra 10 secondi (interrompibile)",
+        description=t("cmd_shutdown_desc"),
         destructive=True,
-        usage="/spegni",
+        usage="/shutdown",
     ))
     REGISTRY.register(CommandDefinition(
-        name="riavvia",
+        name="restart",
         handler=schedule_restart,
-        description="Programma il riavvio del PC tra 10 secondi (interrompibile)",
+        description=t("cmd_restart_desc"),
         destructive=True,
-        usage="/riavvia",
+        usage="/restart",
     ))
     REGISTRY.register(CommandDefinition(
         name="annulla",
         handler=abort_shutdown,
-        description="Annulla un'operazione di spegnimento o riavvio programmata",
+        description=t("cmd_annulla_desc"),
         destructive=False,
         usage="/annulla",
     ))
     REGISTRY.register(CommandDefinition(
         name="out",
         handler=lock_workstation,
-        description="Blocca immediatamente la postazione Windows (Lock Workstation)",
+        description=t("cmd_out_desc"),
         destructive=False,
         usage="/out",
     ))
     REGISTRY.register(CommandDefinition(
         name="ping",
         handler=ping,
-        description="Verifica che il PC sia online e restituisce l'uptime del sistema",
+        description=t("cmd_ping_desc"),
         destructive=False,
         usage="/ping",
     ))
     REGISTRY.register(CommandDefinition(
         name="status",
         handler=status,
-        description="Mostra lo stato dettagliato dell'applicazione, del bot e delle risorse PC",
+        description=t("cmd_status_desc"),
         destructive=False,
         usage="/status",
     ))
     REGISTRY.register(CommandDefinition(
         name="help",
         handler=help_command,
-        description="Mostra l'elenco dei comandi autorizzati e la loro descrizione",
+        description=t("cmd_help_desc"),
         destructive=False,
         usage="/help",
     ))
@@ -74,21 +75,21 @@ def register_all_commands() -> None:
     REGISTRY.register(CommandDefinition(
         name="firefox",
         handler=launch_firefox,
-        description="Avvia il browser Mozilla Firefox (con rilevamento automatico del percorso)",
+        description=t("cmd_firefox_desc"),
         destructive=False,
         usage="/firefox",
     ))
     REGISTRY.register(CommandDefinition(
         name="outlook",
         handler=launch_outlook,
-        description="Avvia Microsoft Outlook (con rilevamento Click-to-Run / MSI)",
+        description=t("cmd_outlook_desc"),
         destructive=False,
         usage="/outlook",
     ))
     REGISTRY.register(CommandDefinition(
         name="note",
         handler=open_notepad_note,
-        description="Apre Blocco Note (Notepad) e incolla il testo inviato",
+        description=t("cmd_note_desc"),
         destructive=False,
         usage="note: <testo della nota>",
         takes_argument=True,
@@ -98,7 +99,7 @@ def register_all_commands() -> None:
     REGISTRY.register(CommandDefinition(
         name="panic",
         handler=execute_panic,
-        description="Chiude le applicazioni utente (richiede conferma: /panic conferma)",
+        description=t("cmd_panic_desc"),
         destructive=True,
         usage="/panic",
     ))

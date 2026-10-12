@@ -43,7 +43,7 @@ def test_dynamic_help_generation():
         destructive=False,
     ))
     reg.register(CommandDefinition(
-        name="spegni",
+        name="shutdown",
         handler=dummy_handler,
         description="Shuts down PC",
         destructive=True,
@@ -52,6 +52,6 @@ def test_dynamic_help_generation():
     help_text = reg.generate_help()
     assert "/ping" in help_text
     assert "Checks status" in help_text
-    assert "/spegni" in help_text
+    assert "/shutdown" in help_text
     assert "Shuts down PC" in help_text
-    assert "Comandi con impatto sul sistema" in help_text
+    assert "System impact commands" in help_text

@@ -9,6 +9,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable, Optional, Dict, Any
 
+from i18n import t
+
 
 @dataclass
 class CommandResult:
@@ -66,9 +68,9 @@ class CommandRegistry:
         No hardcoded command list is maintained outside this registry.
         """
         lines = [
-            "🖥️ *BotMyPC — Telecomando Remoto PC*",
-            "━━━━━━━━━━━━━━━━━━━━━━━━━━━",
-            "Ecco l'elenco dei comandi autorizzati:\n",
+            t("telegram_help_header"),
+            t("telegram_help_separator"),
+            t("telegram_help_list_header"),
         ]
 
         # Group by non-destructive vs destructive
@@ -88,11 +90,11 @@ class CommandRegistry:
             lines.extend(standard_cmds)
 
         if destructive_cmds:
-            lines.append("\n*Comandi con impatto sul sistema:*")
+            lines.append(t("telegram_help_destructive_header"))
             lines.extend(destructive_cmds)
 
-        lines.append("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-        lines.append("🛡️ _I comandi non registrati o con argomenti arbitrari vengono rifiutati._")
+        lines.append(t("telegram_help_separator"))
+        lines.append(t("telegram_help_footer"))
 
         return "\n".join(lines)
 

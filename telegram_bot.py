@@ -304,9 +304,9 @@ class TelegramBotManager:
         # 2. Command normalization
         norm_cmd: NormalizedCommand = CommandNormalizer.normalize(raw_text)
         if not norm_cmd.is_valid:
-            err_msg = norm_cmd.error_message or "Comando non valido."
+            err_msg = norm_cmd.error_message or t("telegram_invalid_cmd")
             logger.info(t("log_invalid_command", cmd=raw_text[:30], err=err_msg))
-            await update.message.reply_text(f"⚠️ {err_msg}\nInvia `/help` per i comandi autorizzati.")
+            await update.message.reply_text(t("telegram_reply_invalid_cmd", err=err_msg))
             return
 
         # 3. Anti-duplicate check (Section 11)
@@ -339,8 +339,7 @@ class TelegramBotManager:
         if not cmd_def:
             logger.info(t("log_unknown_command", cmd=norm_cmd.command))
             await update.message.reply_text(
-                f"❓ Comando sconosciuto: `/{norm_cmd.command}`\n"
-                "Invia `/help` per visualizzare i comandi autorizzati.",
+                t("telegram_unknown_cmd", cmd=norm_cmd.command),
                 parse_mode="Markdown",
             )
             return
@@ -355,7 +354,7 @@ class TelegramBotManager:
             logger.exception(t("log_unhandled_error", cmd=norm_cmd.command))
             result = CommandResult(
                 success=False,
-                message=f"❌ Si è verificato un errore interno durante l'esecuzione del comando.",
+                message=t("telegram_error_internal", cmd=norm_cmd.command, e=e),
                 log_message=t("log_error_internal", cmd=norm_cmd.command, e=e),
             )
 

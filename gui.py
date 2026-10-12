@@ -704,7 +704,7 @@ class MainWindow(ctk.CTk):
         # Right side: Toggle button and Status badge
         self.btn_toggle_bot = ctk.CTkButton(
             header_frame,
-            text="Avvia Bot",
+            text=t("btn_start_bot"),
             width=120,
             height=34,
             fg_color=GUI_ACCENT_COLOR,
@@ -717,7 +717,7 @@ class MainWindow(ctk.CTk):
 
         self.status_badge = ctk.CTkLabel(
             header_frame,
-            text="STATO: STOPPED",
+            text=f"{t('status_prefix')}: {t('state_stopped')}",
             font=ctk.CTkFont(family="Consolas", size=12, weight="bold"),
             text_color=GUI_MUTED_TEXT,
             fg_color="#1E1E1E",
