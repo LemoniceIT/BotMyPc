@@ -114,6 +114,18 @@ python -m pytest -v
 
 `pytest` is included in `requirements.txt`.
 
+## Screenshots
+
+![Main Dashboard](assets/main-dashboard.png)
+
+![Log Viewer](assets/log-viewer.png)
+
+![Outlook Monitor](assets/outlook-monitor.png)
+
+![Language Selector](assets/language-selector.png)
+
+![System Tray](assets/system-tray.png)
+
 ## License
 
 Released under the [MIT License](LICENSE).
