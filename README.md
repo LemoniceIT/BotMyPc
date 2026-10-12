@@ -116,15 +116,15 @@ python -m pytest -v
 
 ## Screenshots
 
-![Main Dashboard](assets/main-dashboard.png)
+![Main Dashboard](assets/screenshots/main-dashboard.png)
 
-![Log Viewer](assets/log-viewer.png)
+![Log Viewer](assets/screenshots/log-viewer.png)
 
-![Outlook Monitor](assets/outlook-monitor.png)
+![Outlook Monitor](assets/screenshots/outlook-monitor.png)
 
-![Language Selector](assets/language-selector.png)
+![Language Selector](assets/screenshots/language-selector.png)
 
-![System Tray](assets/system-tray.png)
+![System Tray](assets/screenshots/system-tray.png)
 
 ## License
 
