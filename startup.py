@@ -17,6 +17,7 @@ import sys
 import winreg
 
 from config import APP_NAME, WINDOWS_RUN_REG_KEY, STARTUP_REG_NAME
+from i18n import t
 
 logger = logging.getLogger(APP_NAME)
 
@@ -67,10 +68,10 @@ def enable_startup() -> bool:
             winreg.KEY_SET_VALUE,
         ) as key:
             winreg.SetValueEx(key, STARTUP_REG_NAME, 0, winreg.REG_SZ, cmd)
-        logger.info(f"Avvio automatico con Windows abilitato: {cmd}")
+        logger.info(t("log_startup_enabled", cmd=cmd))
         return True
     except Exception as e:
-        logger.error(f"Errore durante l'abilitazione dell'avvio con Windows: {e}")
+        logger.error(t("log_startup_enable_error", e=e))
         return False
 
 
@@ -87,13 +88,13 @@ def disable_startup() -> bool:
         ) as key:
             try:
                 winreg.DeleteValue(key, STARTUP_REG_NAME)
-                logger.info("Avvio automatico con Windows disabilitato.")
+                logger.info(t("log_startup_disabled"))
                 return True
             except FileNotFoundError:
                 # Value was already not present
                 return True
     except Exception as e:
-        logger.error(f"Errore durante la disabilitazione dell'avvio con Windows: {e}")
+        logger.error(t("log_startup_disable_error", e=e))
         return False
 
 

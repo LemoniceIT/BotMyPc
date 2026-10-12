@@ -161,7 +161,7 @@ class TokenConfigDialog(ctk.CTkToplevel):
 
         success = credentials.save_credential(credentials.KEY_BOT_TOKEN, raw)
         if success:
-            logger.info("Telegram API token configurato e salvato nel credential storage.")
+            logger.info(t("log_token_saved"))
             self.on_saved()
             self.destroy()
         else:
@@ -263,7 +263,7 @@ class MasterIdConfigDialog(ctk.CTkToplevel):
 
         success = credentials.save_credential(credentials.KEY_MASTER_USER_ID, raw)
         if success:
-            logger.info("Master User ID configurato e salvato.")
+            logger.info(t("log_master_saved"))
             self.on_saved()
             self.destroy()
         else:
@@ -580,7 +580,7 @@ class MailNotificationDialog(ctk.CTkToplevel):
         raw = self.kw_entry.get().strip()
         keywords = [kw.strip() for kw in raw.split(",") if kw.strip()]
         self.mail_monitor.set_keywords(keywords)
-        logger.info("Keywords di notifica mail aggiornate.")
+        logger.info(t("log_mail_keywords_updated"))
         self._add_status_msg(t("mail_kw_saved"), is_error=False)
 
     def _toggle_monitoring(self) -> None:
@@ -1105,7 +1105,7 @@ class MainWindow(ctk.CTk):
     def hide_to_tray(self) -> None:
         """Hides the main window to the system notification area."""
         self.withdraw()
-        logger.info("Finestra minimizzata nella System Tray.")
+        logger.info(t("log_window_minimized"))
 
     def show_from_tray(self) -> None:
         """Restores and focuses the main window from system tray."""
@@ -1115,7 +1115,7 @@ class MainWindow(ctk.CTk):
         self.deiconify()
         self.lift()
         self.focus_force()
-        logger.info("Finestra ripristinata dalla System Tray.")
+        logger.info(t("log_window_restored"))
 
     def _on_window_close(self) -> None:
         """

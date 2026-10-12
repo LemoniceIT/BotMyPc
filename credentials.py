@@ -26,6 +26,7 @@ from config import (
     FALLBACK_CREDENTIALS_FILE,
     FALLBACK_KEY_FILE,
 )
+from i18n import t
 
 logger = logging.getLogger(APP_NAME)
 
@@ -143,7 +144,7 @@ def _read_fallback_store() -> Dict[str, str]:
         decrypted_json = cipher.decrypt(encrypted_data).decode("utf-8")
         return json.loads(decrypted_json)
     except Exception as e:
-        logger.warning(f"Could not read encrypted fallback credentials: {e}")
+        logger.warning(t("log_fallback_read_error", e=e))
         return {}
 
 
@@ -172,7 +173,7 @@ def save_credential(key: str, value: str) -> bool:
         keyring.set_password(SERVICE_NAME, key, cleaned_value)
         saved_keyring = True
     except Exception as e:
-        logger.warning(f"Keyring failed to save {key}: {e}. Trying DPAPI fallback...")
+        logger.warning(t("log_keyring_save_error", key=key, e=e))
 
     # Also keep fallback in sync or as primary if keyring failed
     try:
@@ -181,7 +182,7 @@ def save_credential(key: str, value: str) -> bool:
         _write_fallback_store(store)
         return True
     except Exception as e:
-        logger.error(f"Failed to save credential {key} to DPAPI fallback: {e}")
+        logger.error(t("log_dpapi_save_error", key=key, e=e))
         return saved_keyring
 
 
@@ -196,7 +197,7 @@ def load_credential(key: str) -> Optional[str]:
         if val is not None and val.strip():
             return val.strip()
     except Exception as e:
-        logger.debug(f"Keyring load exception for {key}: {e}")
+        logger.debug(t("log_keyring_load_debug", key=key, e=e))
 
     # 2. Try DPAPI fallback
     try:
@@ -205,7 +206,7 @@ def load_credential(key: str) -> Optional[str]:
         if val is not None and val.strip():
             return val.strip()
     except Exception as e:
-        logger.debug(f"Fallback load exception for {key}: {e}")
+        logger.debug(t("log_fallback_load_debug", key=key, e=e))
 
     return None
 

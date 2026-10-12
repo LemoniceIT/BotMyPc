@@ -26,7 +26,7 @@ def _load_or_generate_icon() -> Image.Image:
         try:
             return Image.open(ICON_PATH)
         except Exception as e:
-            logger.warning(f"Could not load icon file {ICON_PATH}: {e}")
+            logger.warning(t("log_tray_icon_error", path=ICON_PATH, e=e))
 
     # Fallback in-memory image
     size = 64
@@ -75,9 +75,9 @@ class SystemTrayManager:
         try:
             self._icon.run_detached()
             self._is_running = True
-            logger.info("System Tray avviata.")
+            logger.info(t("log_tray_started"))
         except Exception as e:
-            logger.error(f"Impossibile avviare la System Tray: {e}")
+            logger.error(t("log_tray_start_error", e=e))
 
     def stop(self) -> None:
         """Stops and removes the system tray icon."""
@@ -87,16 +87,16 @@ class SystemTrayManager:
             except Exception:
                 pass
             self._is_running = False
-            logger.info("System Tray rimossa.")
+            logger.info(t("log_tray_stopped"))
 
     def _handle_show(self, icon: Optional[pystray.Icon] = None, item: Optional[pystray.MenuItem] = None) -> None:
         try:
             self._on_show()
         except Exception as e:
-            logger.error(f"Errore handler 'Mostra' da tray: {e}")
+            logger.error(t("log_tray_show_error", e=e))
 
     def _handle_exit(self, icon: Optional[pystray.Icon] = None, item: Optional[pystray.MenuItem] = None) -> None:
         try:
             self._on_exit()
         except Exception as e:
-            logger.error(f"Errore handler 'Esci' da tray: {e}")
+            logger.error(t("log_tray_exit_error", e=e))

@@ -15,6 +15,7 @@ from PIL import Image, ImageDraw, ImageFont
 import customtkinter as ctk
 
 from config import APP_NAME, ICONS_DIR
+from i18n import t
 
 logger = logging.getLogger(APP_NAME)
 
@@ -74,7 +75,7 @@ def _ensure_icon_exists(name: str, out_path: Path) -> bool:
         img.save(out_path, format="PNG")
         return True
     except Exception as e:
-        logger.error(f"Failed to generate icon {name}: {e}")
+        logger.error(t("log_icon_generate_error", name=name, e=e))
         return False
 
 
@@ -92,7 +93,7 @@ def get_button_icon(name: str, size: Tuple[int, int] = (16, 16)) -> Optional[ctk
         _ensure_icon_exists(name, icon_file)
 
     if not icon_file.exists():
-        logger.warning(f"Icon file not found: {icon_file}")
+        logger.warning(t("log_icon_not_found", path=icon_file))
         return None
 
     try:
@@ -101,5 +102,5 @@ def get_button_icon(name: str, size: Tuple[int, int] = (16, 16)) -> Optional[ctk
         _ICON_CACHE[cache_key] = ctk_img
         return ctk_img
     except Exception as e:
-        logger.error(f"Error loading icon '{name}' from {icon_file}: {e}")
+        logger.error(t("log_icon_load_error", name=name, path=icon_file, e=e))
         return None

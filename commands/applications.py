@@ -21,6 +21,7 @@ import winreg
 
 from command_registry import CommandResult
 from config import APP_NAME
+from i18n import t
 
 logger = logging.getLogger(APP_NAME)
 
@@ -110,11 +111,11 @@ def launch_firefox() -> CommandResult:
     """Launches Mozilla Firefox if installed."""
     exe = resolve_firefox_path()
     if not exe:
-        logger.warning("Tentativo di avvio Firefox: eseguibile non trovato.")
+        logger.warning(t("log_firefox_not_found"))
         return CommandResult(
             success=False,
             message="❌ Firefox non trovato sul sistema.",
-            log_message="Firefox non trovato.",
+            log_message=t("log_msg_firefox_not_found"),
         )
 
     try:
@@ -123,14 +124,14 @@ def launch_firefox() -> CommandResult:
         return CommandResult(
             success=True,
             message="🌐 Avvio di Mozilla Firefox completato.",
-            log_message=f"Avviato Firefox da: {exe}",
+            log_message=t("log_msg_firefox_launched", exe=exe),
         )
     except Exception as e:
-        logger.exception(f"Errore durante l'avvio di Firefox ({exe}):")
+        logger.exception(t("log_firefox_start_error", exe=exe))
         return CommandResult(
             success=False,
             message=f"❌ Errore durante l'avvio di Firefox: {str(e)}",
-            log_message=f"Errore lancio Firefox: {e}",
+            log_message=t("log_msg_firefox_error", e=e),
         )
 
 
@@ -138,11 +139,11 @@ def launch_outlook() -> CommandResult:
     """Launches Microsoft Outlook if installed."""
     exe = resolve_outlook_path()
     if not exe:
-        logger.warning("Tentativo di avvio Outlook: eseguibile non trovato.")
+        logger.warning(t("log_outlook_not_found"))
         return CommandResult(
             success=False,
             message="❌ Outlook non trovato sul sistema.",
-            log_message="Outlook non trovato.",
+            log_message=t("log_msg_outlook_not_found"),
         )
 
     try:
@@ -151,14 +152,14 @@ def launch_outlook() -> CommandResult:
         return CommandResult(
             success=True,
             message="📧 Avvio di Microsoft Outlook completato.",
-            log_message=f"Avviato Outlook da: {exe}",
+            log_message=t("log_msg_outlook_launched", exe=exe),
         )
     except Exception as e:
-        logger.exception(f"Errore durante l'avvio di Outlook ({exe}):")
+        logger.exception(t("log_outlook_start_error", exe=exe))
         return CommandResult(
             success=False,
             message=f"❌ Errore durante l'avvio di Outlook: {str(e)}",
-            log_message=f"Errore lancio Outlook: {e}",
+            log_message=t("log_msg_outlook_error", e=e),
         )
 
 
@@ -171,7 +172,7 @@ def open_notepad_note(note_text: str) -> CommandResult:
         return CommandResult(
             success=False,
             message="❌ Il testo della nota non può essere vuoto.",
-            log_message="Tentativo di aprire nota vuota.",
+            log_message=t("log_msg_note_empty"),
         )
 
     try:
@@ -200,12 +201,12 @@ def open_notepad_note(note_text: str) -> CommandResult:
         return CommandResult(
             success=True,
             message=msg,
-            log_message=f"Aperto Notepad con nota: '{preview}'",
+            log_message=t("log_msg_note_opened", preview=preview),
         )
     except Exception as e:
-        logger.exception("Errore durante l'apertura di Notepad per la nota:")
+        logger.exception(t("log_notepad_note_error"))
         return CommandResult(
             success=False,
             message=f"❌ Errore durante l'apertura di Notepad: {str(e)}",
-            log_message=f"Errore lancio Notepad: {e}",
+            log_message=t("log_msg_note_error", e=e),
         )

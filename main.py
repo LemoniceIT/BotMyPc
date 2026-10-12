@@ -16,6 +16,7 @@ import sys
 import threading
 
 from config import APP_NAME, APP_VERSION
+from i18n import t
 from logging_config import setup_logging
 import credentials
 from telegram_bot import TelegramBotManager
@@ -30,12 +31,14 @@ def main() -> None:
 
     # 2. Setup logging (RotatingFileHandler + Console + QueueLogHandler)
     logger = setup_logging(gui_log_queue)
-    logger.info(f"{APP_NAME} v{APP_VERSION} avviato su Windows 11.")
+    logger.info(t("log_started", app_name=APP_NAME, version=APP_VERSION))
 
     # Check credentials presence (never log values!)
     token_present = credentials.load_credential(credentials.KEY_BOT_TOKEN) is not None
     master_present = credentials.load_credential(credentials.KEY_MASTER_USER_ID) is not None
-    logger.info(f"Stato credenziali: Bot Token {'PRESENTE' if token_present else 'ASSENTE'}, Master ID {'PRESENTE' if master_present else 'ASSENTE'}.")
+    token_status = t("log_token_present") if token_present else t("log_token_missing")
+    master_status = t("log_token_present") if master_present else t("log_token_missing")
+    logger.info(t("log_credentials_status", token=token_status, master=master_status))
 
     # 3. Initialize Telegram Bot Manager
     bot_manager = TelegramBotManager(gui_queue=gui_log_queue)
@@ -57,27 +60,27 @@ def main() -> None:
                 return
             is_shutting_down = True
 
-        logger.info("Avvio sequenza di chiusura ordinata...")
+        logger.info(t("log_shutdown_start"))
 
         # 1. Stop Telegram Bot & background thread
         try:
             bot_manager.stop_bot(wait_timeout=4.0)
         except Exception as e:
-            logger.error(f"Errore durante l'arresto del bot: {e}")
+            logger.error(t("log_error_stopping_bot", e=e))
 
         # 2. Stop Outlook Mail Monitor
         if mail_monitor and mail_monitor.is_running():
             try:
                 mail_monitor.stop()
             except Exception as e:
-                logger.error(f"Errore durante l'arresto del monitor mail: {e}")
+                logger.error(t("log_error_stopping_mail", e=e))
 
         # 3. Stop System Tray
         if tray_ref:
             try:
                 tray_ref.stop()
             except Exception as e:
-                logger.error(f"Errore durante la chiusura della tray: {e}")
+                logger.error(t("log_error_stopping_tray", e=e))
 
         # 3. Destroy GUI Window
         if window_ref:
@@ -86,7 +89,7 @@ def main() -> None:
             except Exception:
                 pass
 
-        logger.info("Chiusura applicazione completata.")
+        logger.info(t("log_shutdown_done"))
 
     # 4. Initialize CustomTkinter Main Window (Main Thread)
     window = MainWindow(
@@ -114,7 +117,7 @@ def main() -> None:
     except KeyboardInterrupt:
         shutdown_app()
     except Exception as e:
-        logger.exception(f"Errore imprevisto nel mainloop della GUI: {e}")
+        logger.exception(t("log_unexpected_error", e=e))
         shutdown_app()
 
 

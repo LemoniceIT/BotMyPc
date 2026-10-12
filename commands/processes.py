@@ -14,6 +14,7 @@ import psutil
 
 from command_registry import CommandResult
 from config import APP_NAME
+from i18n import t
 
 logger = logging.getLogger(APP_NAME)
 
@@ -71,7 +72,7 @@ def _get_protected_pids() -> Set[int]:
         for child in current_proc.children(recursive=True):
             protected_pids.add(child.pid)
     except Exception as e:
-        logger.debug(f"Could not resolve process hierarchy: {e}")
+        logger.debug(t("log_resolve_hierarchy_error", e=e))
 
     return protected_pids
 
@@ -86,7 +87,7 @@ def execute_panic() -> CommandResult:
     denied_count = 0
     terminated_names: List[str] = []
 
-    logger.warning("PANIC PROCEDURE INITIATED: Terminating user applications...")
+    logger.warning(t("log_panic_procedure"))
 
     # Iterate over all running processes safely
     for proc in psutil.process_iter(["pid", "name", "username"]):
@@ -103,7 +104,7 @@ def execute_panic() -> CommandResult:
                 continue
 
             # 3. Attempt termination
-            logger.info(f"Panic terminating PID={pid} ({name})...")
+            logger.info(t("log_panic_terminating", pid=pid, name=name))
             proc.terminate()
             terminated_names.append(f"{name} (PID {pid})")
             terminated_count += 1
@@ -112,9 +113,9 @@ def execute_panic() -> CommandResult:
             continue
         except psutil.AccessDenied:
             denied_count += 1
-            logger.debug(f"AccessDenied while trying to terminate PID {proc.pid}")
+            logger.debug(t("log_access_denied_terminate", pid=proc.pid))
         except Exception as e:
-            logger.debug(f"Exception terminating PID {proc.pid}: {e}")
+            logger.debug(t("log_exception_terminating", proc=proc.pid, e=e))
 
     # Give processes a brief moment to gracefully exit, then force kill any remaining
     time.sleep(0.5)
@@ -128,7 +129,7 @@ def execute_panic() -> CommandResult:
     if denied_count > 0:
         msg += f"⚠️ Processi protetti da permessi elevati: `{denied_count}`\n"
 
-    log_msg = f"Panic eseguito: {terminated_count} processi chiusi, {denied_count} protetti."
+    log_msg = t("log_msg_panic_done", terminated=terminated_count, denied=denied_count)
     return CommandResult(
         success=True,
         message=msg,

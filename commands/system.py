@@ -21,6 +21,7 @@ import psutil
 
 from command_registry import CommandResult, REGISTRY
 from config import APP_NAME, APP_VERSION, SHUTDOWN_DELAY_SECONDS
+from i18n import t
 import credentials
 
 logger = logging.getLogger(APP_NAME)
@@ -48,22 +49,22 @@ def schedule_shutdown() -> CommandResult:
             return CommandResult(
                 success=True,
                 message=msg,
-                log_message=f"Shutdown programmato tra {delay_str}s.",
+                log_message=t("log_msg_shutdown_scheduled", delay=delay_str),
             )
         else:
             err = res.stderr.strip() or "Errore sconosciuto di Windows."
             return CommandResult(
                 success=False,
                 message=f"❌ Impossibile programmare lo spegnimento: {err}",
-                log_message=f"Errore shutdown: {err}",
+                log_message=t("log_msg_shutdown_error", err=err),
                 error_code=res.returncode,
             )
     except Exception as e:
-        logger.exception("Eccezione durante la chiamata a shutdown:")
+        logger.exception(t("log_error_shutdown_call"))
         return CommandResult(
             success=False,
             message=f"❌ Errore interno durante lo spegnimento: {str(e)}",
-            log_message=f"Eccezione shutdown: {e}",
+            log_message=t("log_msg_shutdown_exception", e=e),
         )
 
 
@@ -85,22 +86,22 @@ def schedule_restart() -> CommandResult:
             return CommandResult(
                 success=True,
                 message=msg,
-                log_message=f"Riavvio programmato tra {delay_str}s.",
+                log_message=t("log_msg_restart_scheduled", delay=delay_str),
             )
         else:
             err = res.stderr.strip() or "Errore sconosciuto di Windows."
             return CommandResult(
                 success=False,
                 message=f"❌ Impossibile programmare il riavvio: {err}",
-                log_message=f"Errore riavvio: {err}",
+                log_message=t("log_msg_restart_error", err=err),
                 error_code=res.returncode,
             )
     except Exception as e:
-        logger.exception("Eccezione durante la chiamata a restart:")
+        logger.exception(t("log_error_restart_call"))
         return CommandResult(
             success=False,
             message=f"❌ Errore interno durante il riavvio: {str(e)}",
-            log_message=f"Eccezione riavvio: {e}",
+            log_message=t("log_msg_restart_exception", e=e),
         )
 
 
@@ -119,7 +120,7 @@ def abort_shutdown() -> CommandResult:
             return CommandResult(
                 success=True,
                 message=msg,
-                log_message="Shutdown/Riavvio annullato.",
+                log_message=t("log_msg_abort_done"),
             )
         else:
             # Code 1116 means no shutdown was in progress
@@ -129,14 +130,14 @@ def abort_shutdown() -> CommandResult:
             return CommandResult(
                 success=True,
                 message=msg,
-                log_message="Tentativo di annullamento shutdown: nessuna operazione in corso.",
+                log_message=t("log_msg_abort_none"),
             )
     except Exception as e:
-        logger.exception("Eccezione durante la chiamata a shutdown /a:")
+        logger.exception(t("log_error_shutdown_abort"))
         return CommandResult(
             success=False,
             message=f"❌ Errore interno durante l'annullamento: {str(e)}",
-            log_message=f"Eccezione annulla: {e}",
+            log_message=t("log_msg_abort_exception", e=e),
         )
 
 
@@ -148,22 +149,22 @@ def lock_workstation() -> CommandResult:
             return CommandResult(
                 success=True,
                 message="🔒 Postazione Windows bloccata.",
-                log_message="Workstation bloccata con successo.",
+                log_message=t("log_msg_lock_success"),
             )
         else:
             err_code = ctypes.GetLastError()
             return CommandResult(
                 success=False,
                 message=f"❌ Errore blocco postazione (codice: {err_code}).",
-                log_message=f"LockWorkStation fallito con codice {err_code}.",
+                log_message=t("log_msg_lock_failed", code=err_code),
                 error_code=err_code,
             )
     except Exception as e:
-        logger.exception("Eccezione durante LockWorkStation:")
+        logger.exception(t("log_error_lockworkstation"))
         return CommandResult(
             success=False,
             message=f"❌ Errore durante il blocco postazione: {str(e)}",
-            log_message=f"Eccezione LockWorkStation: {e}",
+            log_message=t("log_msg_lock_exception", e=e),
         )
 
 
@@ -187,7 +188,7 @@ def ping() -> CommandResult:
     return CommandResult(
         success=True,
         message=msg,
-        log_message=f"Ping risposto. Uptime: {uptime_str}",
+        log_message=t("log_msg_ping", uptime=uptime_str),
     )
 
 
@@ -243,7 +244,7 @@ def status() -> CommandResult:
     return CommandResult(
         success=True,
         message="\n".join(lines),
-        log_message="Comando status eseguito con successo.",
+        log_message=t("log_msg_status"),
     )
 
 
@@ -252,5 +253,5 @@ def help_command() -> CommandResult:
     return CommandResult(
         success=True,
         message=REGISTRY.generate_help(),
-        log_message="Guida comandi inviata.",
+        log_message=t("log_msg_help"),
     )

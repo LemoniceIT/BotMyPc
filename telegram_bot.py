@@ -27,6 +27,7 @@ from telegram.ext import (
 )
 
 from config import APP_NAME
+from i18n import t
 from command_registry import REGISTRY, CommandResult
 from security import (
     SecurityGateway,
@@ -84,12 +85,12 @@ class TelegramBotManager:
     def _set_state(self, new_state: BotState) -> None:
         with self._state_lock:
             self._state = new_state
-        logger.info(f"Stato bot: {new_state.value}")
+        logger.info(t("log_bot_state", state=new_state.value))
         if self.on_state_change:
             try:
                 self.on_state_change(new_state)
             except Exception as e:
-                logger.debug(f"Error invoking on_state_change: {e}")
+                logger.debug(t("log_state_change_error", e=e))
 
     # =========================================================================
     # Start / Stop API
@@ -99,13 +100,13 @@ class TelegramBotManager:
         """Starts the bot in a dedicated background thread."""
         with self._state_lock:
             if self._state in (BotState.STARTING, BotState.RUNNING):
-                logger.warning("Tentativo di avviare il bot quando è già in esecuzione.")
+                logger.warning(t("log_bot_already_running"))
                 return False
 
             token = credentials.load_credential(credentials.KEY_BOT_TOKEN)
             if not token:
-                logger.error("Impossibile avviare il bot: Token non configurato.")
-                self.gui_queue.put("[ERRORE] Bot Token non configurato. Configuralo prima di avviare.")
+                logger.error(t("log_bot_token_missing"))
+                self.gui_queue.put(t("log_bot_token_missing_gui"))
                 return False
 
         self._set_state(BotState.STARTING)
@@ -126,7 +127,7 @@ class TelegramBotManager:
                 return True
 
         self._set_state(BotState.STOPPING)
-        logger.info("Arresto del bot in corso...")
+        logger.info(t("log_bot_stopping"))
 
         # Signal the asyncio loop to stop
         if self._loop and self._stop_event:
@@ -136,7 +137,7 @@ class TelegramBotManager:
             self._thread.join(timeout=wait_timeout)
 
         self._set_state(BotState.STOPPED)
-        logger.info("Bot arrestato con successo.")
+        logger.info(t("log_bot_stopped"))
         return True
 
     # =========================================================================
@@ -152,17 +153,17 @@ class TelegramBotManager:
         dedicated asyncio event loop via ``run_coroutine_threadsafe``.
         """
         if self._loop is None or self._application is None:
-            logger.warning("send_message: bot non avviato, impossibile inviare.")
+            logger.warning(t("log_send_not_running"))
             return False
 
         master_id_str = credentials.load_credential(credentials.KEY_MASTER_USER_ID)
         if not master_id_str:
-            logger.warning("send_message: Master User ID non configurato.")
+            logger.warning(t("log_send_master_unconfigured"))
             return False
         try:
             master_id = int(master_id_str.strip())
         except (ValueError, TypeError):
-            logger.error("send_message: Master User ID non valido.")
+            logger.error(t("log_send_master_invalid"))
             return False
 
         async def _do_send() -> None:
@@ -171,22 +172,20 @@ class TelegramBotManager:
                     chat_id=master_id, text=message, parse_mode=parse_mode
                 )
             except Exception as md_err:
-                logger.debug(
-                    f"send_message: invio con Markdown fallito, riprovo plain text: {md_err}"
-                )
+                logger.debug(t("log_markdown_failed", e=md_err))
                 try:
                     await self._application.bot.send_message(
                         chat_id=master_id, text=message
                     )
                 except Exception as e2:
-                    logger.error(f"send_message: invio fallback fallito: {e2}")
+                    logger.error(t("log_send_fallback_failed", e2=e2))
 
         try:
             future = asyncio.run_coroutine_threadsafe(_do_send(), self._loop)
             future.result(timeout=10.0)
             return True
         except Exception as e:
-            logger.error(f"send_message: errore durante l'invio: {e}")
+            logger.error(t("log_send_error", e=e))
             return False
 
     # =========================================================================
@@ -201,7 +200,7 @@ class TelegramBotManager:
         try:
             self._loop.run_until_complete(self._async_bot_main(token))
         except Exception as e:
-            logger.exception(f"Errore fatale nel thread del bot Telegram: {e}")
+            logger.exception(t("log_fatal_bot_error", e=e))
             self._set_state(BotState.ERROR)
         finally:
             try:
@@ -251,19 +250,19 @@ class TelegramBotManager:
             )
 
             self._set_state(BotState.RUNNING)
-            logger.info("Bot Telegram avviato e in ascolto.")
+            logger.info(t("log_bot_started"))
 
             # Run until stopped
             await self._stop_event.wait()
 
         except Exception as e:
-            logger.error(f"Errore di avvio/connessione Telegram: {e}")
+            logger.error(t("log_telegram_startup_error", e=e))
             self._set_state(BotState.ERROR)
             raise
         finally:
             # Orderly teardown
             if self._application:
-                logger.info("Chiusura updater e applicazione Telegram...")
+                logger.info(t("log_closing_telegram"))
                 if self._application.updater and self._application.updater.running:
                     await self._application.updater.stop()
                 if self._application.running:
@@ -306,7 +305,7 @@ class TelegramBotManager:
         norm_cmd: NormalizedCommand = CommandNormalizer.normalize(raw_text)
         if not norm_cmd.is_valid:
             err_msg = norm_cmd.error_message or "Comando non valido."
-            logger.info(f"Comando non valido rifiutato: '{raw_text[:30]}' ({err_msg})")
+            logger.info(t("log_invalid_command", cmd=raw_text[:30], err=err_msg))
             await update.message.reply_text(f"⚠️ {err_msg}\nInvia `/help` per i comandi autorizzati.")
             return
 
@@ -314,10 +313,10 @@ class TelegramBotManager:
         # Check against the command name, or command+argument for note
         dup_key = f"{norm_cmd.command}:{norm_cmd.argument}" if norm_cmd.command == "note" else norm_cmd.command
         if self.security_gateway.anti_duplicate.is_duplicate(sender_id, dup_key):
-            logger.info(f"Comando duplicato ignorato per ID {sender_id}: '{norm_cmd.command}'")
+            logger.info(t("log_dup_command", sender_id=sender_id, cmd=norm_cmd.command))
             return
 
-        logger.info(f"Comando ricevuto da Master: /{norm_cmd.command} {norm_cmd.argument}".strip())
+        logger.info(t("log_cmd_received", cmd=norm_cmd.command, arg=norm_cmd.argument).strip())
 
         # 4. Handle Panic confirmation flow (Section 18)
         if norm_cmd.command == "panic":
@@ -338,7 +337,7 @@ class TelegramBotManager:
         # 5. Command Registry lookup
         cmd_def = REGISTRY.get(norm_cmd.command)
         if not cmd_def:
-            logger.info(f"Comando sconosciuto: '{norm_cmd.command}'")
+            logger.info(t("log_unknown_command", cmd=norm_cmd.command))
             await update.message.reply_text(
                 f"❓ Comando sconosciuto: `/{norm_cmd.command}`\n"
                 "Invia `/help` per visualizzare i comandi autorizzati.",
@@ -353,16 +352,16 @@ class TelegramBotManager:
             else:
                 result: CommandResult = await asyncio.to_thread(cmd_def.handler)
         except Exception as e:
-            logger.exception(f"Errore non gestito nell'esecuzione di {norm_cmd.command}:")
+            logger.exception(t("log_unhandled_error", cmd=norm_cmd.command))
             result = CommandResult(
                 success=False,
                 message=f"❌ Si è verificato un errore interno durante l'esecuzione del comando.",
-                log_message=f"Errore interno {norm_cmd.command}: {e}",
+                log_message=t("log_error_internal", cmd=norm_cmd.command, e=e),
             )
 
         # 7. Log outcome and respond to user
         if result.log_message:
-            logger.info(f"Esito comando {norm_cmd.command}: {result.log_message}")
+            logger.info(t("log_command_result", cmd=norm_cmd.command, msg=result.log_message))
 
         try:
             await update.message.reply_markdown(result.message)

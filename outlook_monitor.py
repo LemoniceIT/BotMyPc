@@ -1,12 +1,14 @@
 import threading
 import time
 import logging
+from pathlib import Path
 from typing import List
 
 import win32com.client
 import pythoncom
 
 from config import APP_NAME, MAX_LOG_MESSAGE_PREVIEW_LEN
+from i18n import t
 from telegram_bot import TelegramBotManager
 
 logger = logging.getLogger(APP_NAME)
@@ -51,7 +53,7 @@ class OutlookMailMonitor:
                 self.enabled = data.get("enabled", False)
                 self.keywords = data.get("keywords", [])
             except Exception as e:
-                logger.error(f"Failed to load mail notify config: {e}")
+                logger.error(t("log_mail_config_error", e=e))
                 self.enabled = False
                 self.keywords = []
         else:
@@ -66,14 +68,14 @@ class OutlookMailMonitor:
         try:
             path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
         except Exception as e:
-            logger.error(f"Failed to save mail notify config: {e}")
+            logger.error(t("log_mail_config_save_error", e=e))
 
     # ---------------------------------------------------------------------
     # Public API
     # ---------------------------------------------------------------------
     def start(self):
         if self._thread and self._thread.is_alive():
-            logger.info("OutlookMailMonitor already running.")
+            logger.info(t("log_mail_already_running"))
             return
         self.enabled = True
         self._save_config()
@@ -83,7 +85,7 @@ class OutlookMailMonitor:
         self._thread.start()
         cutoff_timestamp = self._start_time - 30 * 60
         cutoff_str = time.strftime("%H:%M:%S", time.localtime(cutoff_timestamp))
-        logger.info(f"OutlookMailMonitor started. Notification cutoff: emails received after {cutoff_str} will trigger alerts.")
+        logger.info(t("log_mail_started", cutoff=cutoff_str))
 
     def stop(self):
         self.enabled = False
@@ -91,7 +93,7 @@ class OutlookMailMonitor:
         self._stop_event.set()
         if self._thread:
             self._thread.join(timeout=2)
-            logger.info("OutlookMailMonitor stopped.")
+            logger.info(t("log_mail_stopped"))
         self._thread = None
 
     def is_running(self) -> bool:
@@ -110,13 +112,13 @@ class OutlookMailMonitor:
             outlook = win32com.client.Dispatch("Outlook.Application")
             namespace = outlook.GetNamespace("MAPI")
             inbox = namespace.GetDefaultFolder(6)  # 6 = olFolderInbox
-            logger.info("Outlook COM access OK. Monitoring Inbox for unread messages.")
+            logger.info(t("log_outlook_com_ok"))
 
             folders_to_monitor: List[tuple] = [("Inbox", inbox)]
 
             cutoff_timestamp = self._start_time - 30 * 60
             cutoff_str = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(cutoff_timestamp))
-            logger.info(f"Cutoff notifiche: mail con orario antecedente a {cutoff_str} verranno ignorate.")
+            logger.info(t("log_cutoff_time", cutoff=cutoff_str))
 
             while not self._stop_event.is_set():
                 try:
@@ -125,7 +127,7 @@ class OutlookMailMonitor:
                         messages.Sort("[ReceivedTime]", Descending=True)
                         unread = messages.Restrict("[Unread] = True")
                         unread_count = len(unread)
-                        logger.debug(f"Polling {folder_name}: {unread_count} unread message(s).")
+                        logger.debug(t("log_polling_folder", folder=folder_name, count=unread_count))
                         for mail in unread:
                             entry_id = getattr(mail, "EntryID", None)
                             if entry_id and entry_id in self._notified_ids:
@@ -140,8 +142,7 @@ class OutlookMailMonitor:
                                     mail_ts = received.timestamp()
                                     if mail_ts < cutoff_timestamp:
                                         logger.debug(
-                                            f"Mail ignorata (troppo vecchia) in {folder_name}: "
-                                            f"'{subject[:MAX_LOG_MESSAGE_PREVIEW_LEN]}'"
+                                            t("log_mail_ignored_old", folder=folder_name, subject=subject[:MAX_LOG_MESSAGE_PREVIEW_LEN])
                                         )
                                         continue
                                 except Exception:
@@ -156,22 +157,22 @@ class OutlookMailMonitor:
                                     f"*Oggetto*: {subject}\n"
                                     f"*Orario*: {time_str}"
                                 )
-                                logger.info(f"Mail corrispondente a keyword trovata in {folder_name}: '{subject[:MAX_LOG_MESSAGE_PREVIEW_LEN]}'")
+                                logger.info(t("log_mail_keyword_match", folder=folder_name, subject=subject[:MAX_LOG_MESSAGE_PREVIEW_LEN]))
                                 if self.bot_manager:
                                     sent = self.bot_manager.send_message(msg)
                                     if sent:
-                                        logger.info("Notifica Telegram inviata con successo.")
+                                        logger.info(t("log_telegram_notify_sent"))
                                     else:
-                                        logger.warning("Invio notifica Telegram fallito.")
+                                        logger.warning(t("log_telegram_notify_failed"))
                                 else:
-                                    logger.warning("Bot manager non disponibile, impossibile inviare notifica.")
+                                    logger.warning(t("log_bot_manager_unavailable"))
                                 if entry_id:
                                     self._notified_ids.add(entry_id)
                 except Exception as e:
-                    logger.error(f"Error while processing Outlook emails: {e}")
+                    logger.error(t("log_outlook_processing_error", e=e))
                 time.sleep(self.poll_interval)
-            logger.info("OutlookMailMonitor thread exiting.")
+            logger.info(t("log_mail_thread_exit"))
         except Exception as e:
-            logger.error(f"Unable to access Outlook via COM: {e}")
+            logger.error(t("log_outlook_com_error", e=e))
         finally:
             pythoncom.CoUninitialize()

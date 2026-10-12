@@ -143,6 +143,150 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         # Tray
         "tray_show": "Show BotMyPC",
         "tray_exit": "Exit",
+
+        # Log Messages — Application Lifecycle (main.py)
+        "log_started": "{app_name} v{version} started on Windows 11.",
+        "log_credentials_status": "Credentials: Bot Token {token}, Master ID {master}.",
+        "log_token_present": "PRESENT",
+        "log_token_missing": "MISSING",
+        "log_shutdown_start": "Starting orderly shutdown sequence...",
+        "log_error_stopping_bot": "Error stopping bot: {e}",
+        "log_error_stopping_mail": "Error stopping mail monitor: {e}",
+        "log_error_stopping_tray": "Error stopping tray: {e}",
+        "log_shutdown_done": "Application shutdown complete.",
+        "log_unexpected_error": "Unexpected error in GUI mainloop: {e}",
+
+        # Log Messages — i18n (i18n.py)
+        "log_language_set": "Language updated to '{lang}' and saved to settings.",
+
+        # Log Messages — Telegram Bot (telegram_bot.py)
+        "log_bot_state": "Bot state: {state}",
+        "log_state_change_error": "Error invoking on_state_change: {e}",
+        "log_bot_already_running": "Attempt to start bot when already running.",
+        "log_bot_token_missing": "Cannot start bot: Token not configured.",
+        "log_bot_token_missing_gui": "[ERROR] Bot Token not configured. Configure it before starting.",
+        "log_bot_stopping": "Stopping bot...",
+        "log_bot_stopped": "Bot stopped successfully.",
+        "log_send_not_running": "send_message: bot not running, cannot send.",
+        "log_send_master_unconfigured": "send_message: Master User ID not configured.",
+        "log_send_master_invalid": "send_message: Master User ID is invalid.",
+        "log_markdown_failed": "send_message: Markdown send failed, retrying plain text: {e}",
+        "log_send_fallback_failed": "send_message: fallback send failed: {e2}",
+        "log_send_error": "send_message: error during sending: {e}",
+        "log_fatal_bot_error": "Fatal error in Telegram bot thread: {e}",
+        "log_bot_started": "Telegram bot started and listening.",
+        "log_telegram_startup_error": "Telegram startup/connection error: {e}",
+        "log_closing_telegram": "Closing Telegram updater and application...",
+        "log_invalid_command": "Invalid command rejected: '{cmd}' ({err})",
+        "log_dup_command": "Duplicate command ignored for ID {sender_id}: '{cmd}'",
+        "log_cmd_received": "Command received from Master: /{cmd} {arg}",
+        "log_unknown_command": "Unknown command: '{cmd}'",
+        "log_command_result": "Command result {cmd}: {msg}",
+
+        # Log Messages — Security (security.py)
+        "log_sec_master_unconfigured": "Telegram update rejected: Master User ID is not configured on this PC.",
+        "log_sec_master_invalid_int": "Configured Master User ID is not a valid integer.",
+        "log_sec_unauthorized_access": "UNAUTHORIZED ACCESS ATTEMPT: User ID={user_id} ({username}) tried to send: '{preview}'",
+
+        # Log Messages — Credentials (credentials.py)
+        "log_fallback_read_error": "Could not read encrypted fallback credentials: {e}",
+        "log_keyring_save_error": "Keyring failed to save '{key}': {e}. Trying DPAPI fallback...",
+        "log_dpapi_save_error": "Failed to save credential '{key}' to DPAPI fallback: {e}",
+        "log_keyring_load_debug": "Keyring load exception for '{key}': {e}",
+        "log_fallback_load_debug": "Fallback load exception for '{key}': {e}",
+
+        # Log Messages — Outlook Monitor (outlook_monitor.py)
+        "log_mail_config_error": "Failed to load mail notify config: {e}",
+        "log_mail_config_save_error": "Failed to save mail notify config: {e}",
+        "log_mail_already_running": "OutlookMailMonitor already running.",
+        "log_mail_started": "OutlookMailMonitor started. Notification cutoff: emails received after {cutoff} will trigger alerts.",
+        "log_mail_stopped": "OutlookMailMonitor stopped.",
+        "log_outlook_com_ok": "Outlook COM access OK. Monitoring Inbox for unread messages.",
+        "log_cutoff_time": "Cutoff: emails received before {cutoff} will be ignored.",
+        "log_polling_folder": "Polling {folder}: {count} unread message(s).",
+        "log_mail_ignored_old": "Mail ignored (too old) in {folder}: '{subject}'",
+        "log_mail_keyword_match": "Matching email found in {folder}: '{subject}'",
+        "log_telegram_notify_sent": "Telegram notification sent successfully.",
+        "log_telegram_notify_failed": "Failed to send Telegram notification.",
+        "log_bot_manager_unavailable": "Bot manager unavailable, cannot send notification.",
+        "log_outlook_processing_error": "Error while processing Outlook emails: {e}",
+        "log_mail_thread_exit": "OutlookMailMonitor thread exiting.",
+        "log_outlook_com_error": "Unable to access Outlook via COM: {e}",
+
+        # Log Messages — GUI (gui.py)
+        "log_token_saved": "Telegram API token configured and saved to credential storage.",
+        "log_master_saved": "Master User ID configured and saved.",
+        "log_mail_keywords_updated": "Mail notification keywords updated.",
+        "log_window_minimized": "Window minimized to System Tray.",
+        "log_window_restored": "Window restored from System Tray.",
+
+        # Log Messages — Tray (tray.py)
+        "log_tray_started": "System Tray started.",
+        "log_tray_start_error": "Could not start System Tray: {e}",
+        "log_tray_icon_error": "Could not load icon file {path}: {e}",
+        "log_tray_stopped": "System Tray removed.",
+        "log_tray_show_error": "Error in tray 'Show' handler: {e}",
+        "log_tray_exit_error": "Error in tray 'Exit' handler: {e}",
+
+        # Log Messages — System Commands (commands/system.py)
+        "log_error_shutdown_call": "Exception during shutdown call:",
+        "log_error_restart_call": "Exception during restart call:",
+        "log_error_shutdown_abort": "Exception during shutdown /a call:",
+        "log_error_lockworkstation": "Exception during LockWorkStation:",
+
+        # Log Messages — Panic (commands/processes.py)
+        "log_panic_procedure": "PANIC PROCEDURE INITIATED: Terminating user applications...",
+        "log_panic_terminating": "Panic terminating PID={pid} ({name})...",
+        "log_access_denied_terminate": "AccessDenied while trying to terminate PID {pid}",
+        "log_exception_terminating": "Exception terminating PID {proc}: {e}",
+        "log_resolve_hierarchy_error": "Could not resolve process hierarchy: {e}",
+
+        # Log Messages — Applications (commands/applications.py)
+        "log_firefox_not_found": "Firefox launch attempt: executable not found.",
+        "log_firefox_start_error": "Error launching Firefox ({exe}):",
+        "log_outlook_not_found": "Outlook launch attempt: executable not found.",
+        "log_outlook_start_error": "Error launching Outlook ({exe}):",
+        "log_notepad_note_error": "Error opening Notepad for note:",
+
+        # Log Messages — Command Result Messages (commands/*.py)
+        "log_unhandled_error": "Unhandled error in command execution: {cmd}:",
+        "log_msg_shutdown_scheduled": "Shutdown scheduled in {delay}s.",
+        "log_msg_shutdown_error": "Shutdown error: {err}",
+        "log_msg_shutdown_exception": "Shutdown exception: {e}",
+        "log_msg_restart_scheduled": "Restart scheduled in {delay}s.",
+        "log_msg_restart_error": "Restart error: {err}",
+        "log_msg_restart_exception": "Restart exception: {e}",
+        "log_msg_abort_done": "Shutdown/Restart cancelled.",
+        "log_msg_abort_none": "Shutdown cancel attempted: no pending operation.",
+        "log_msg_abort_exception": "Abort exception: {e}",
+        "log_msg_lock_success": "Workstation locked successfully.",
+        "log_msg_lock_failed": "LockWorkStation failed with code {code}.",
+        "log_msg_lock_exception": "LockWorkStation exception: {e}",
+        "log_msg_ping": "Ping answered. Uptime: {uptime}",
+        "log_msg_status": "Status command executed successfully.",
+        "log_msg_help": "Command help sent.",
+        "log_msg_panic_done": "Panic executed: {terminated} processes closed, {denied} protected.",
+        "log_msg_firefox_not_found": "Firefox not found.",
+        "log_msg_firefox_launched": "Started Firefox from: {exe}",
+        "log_msg_firefox_error": "Firefox launch error: {e}",
+        "log_msg_outlook_not_found": "Outlook not found.",
+        "log_msg_outlook_launched": "Started Outlook from: {exe}",
+        "log_msg_outlook_error": "Outlook launch error: {e}",
+        "log_msg_note_opened": "Opened Notepad with note: '{preview}'",
+        "log_msg_note_error": "Notepad launch error: {e}",
+        "log_msg_note_empty": "Attempted to open empty note.",
+        "log_error_internal": "Internal error in {cmd}: {e}",
+
+        # Log Messages — Icons (icons.py)
+        "log_icon_generate_error": "Failed to generate icon {name}: {e}",
+        "log_icon_not_found": "Icon file not found: {path}",
+        "log_icon_load_error": "Error loading icon '{name}' from {path}: {e}",
+
+        # Log Messages — Startup (startup.py)
+        "log_startup_enabled": "Windows startup enabled: {cmd}",
+        "log_startup_enable_error": "Error enabling Windows startup: {e}",
+        "log_startup_disabled": "Windows startup disabled.",
+        "log_startup_disable_error": "Error disabling Windows startup: {e}",
     },
     "de": {
         # Header & Status
@@ -258,6 +402,150 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         # Tray
         "tray_show": "BotMyPC anzeigen",
         "tray_exit": "Beenden",
+
+        # Log Messages — Application Lifecycle (main.py)
+        "log_started": "{app_name} v{version} gestartet auf Windows 11.",
+        "log_credentials_status": "Anmeldedaten: Bot-Token {token}, Master-ID {master}.",
+        "log_token_present": "VORHANDEN",
+        "log_token_missing": "FEHLT",
+        "log_shutdown_start": "Start der geordneten Herunterfahrt...",
+        "log_error_stopping_bot": "Fehler beim Stoppen des Bots: {e}",
+        "log_error_stopping_mail": "Fehler beim Stoppen des Mail-Monitors: {e}",
+        "log_error_stopping_tray": "Fehler beim Stoppen der Tray: {e}",
+        "log_shutdown_done": "Anwendungs-Shutdown abgeschlossen.",
+        "log_unexpected_error": "Unerwarteter Fehler in GUI-Mainloop: {e}",
+
+        # Log Messages — i18n (i18n.py)
+        "log_language_set": "Sprache auf '{lang}' aktualisiert und in Einstellungen gespeichert.",
+
+        # Log Messages — Telegram Bot (telegram_bot.py)
+        "log_bot_state": "Bot-Status: {state}",
+        "log_state_change_error": "Fehler beim Aufruf von on_state_change: {e}",
+        "log_bot_already_running": "Versuch, Bot zu starten, obwohl er bereits läuft.",
+        "log_bot_token_missing": "Bot kann nicht gestartet werden: Token nicht konfiguriert.",
+        "log_bot_token_missing_gui": "[FEHLER] Bot-Token nicht konfiguriert. Konfigurieren Sie ihn, bevor Sie starten.",
+        "log_bot_stopping": "Bot wird gestoppt...",
+        "log_bot_stopped": "Bot erfolgreich gestoppt.",
+        "log_send_not_running": "send_message: Bot nicht gestartet, kann nicht senden.",
+        "log_send_master_unconfigured": "send_message: Master User ID nicht konfiguriert.",
+        "log_send_master_invalid": "send_message: Master User ID ungültig.",
+        "log_markdown_failed": "send_message: Markdown-Versand fehlgeschlagen, versuche Plain-Text: {e}",
+        "log_send_fallback_failed": "send_message: Fallback-Versand fehlgeschlagen: {e2}",
+        "log_send_error": "send_message: Fehler beim Senden: {e}",
+        "log_fatal_bot_error": "Fataler Fehler im Telegram-Bot-Thread: {e}",
+        "log_bot_started": "Telegram-Bot gestartet und lauscht.",
+        "log_telegram_startup_error": "Telegram-Start-/Verbindungsfehler: {e}",
+        "log_closing_telegram": "Schließe Telegram-Updater und -Anwendung...",
+        "log_invalid_command": "Ungültiger Befehl abgelehnt: '{cmd}' ({err})",
+        "log_dup_command": "Duplikater Befehl für ID {sender_id} ignoriert: '{cmd}'",
+        "log_cmd_received": "Befehl vom Master empfangen: /{cmd} {arg}",
+        "log_unknown_command": "Unbekannter Befehl: '{cmd}'",
+        "log_command_result": "Befehlsergebnis {cmd}: {msg}",
+
+        # Log Messages — Security (security.py)
+        "log_sec_master_unconfigured": "Telegram-Aktualisierung abgelehnt: Master User ID ist auf diesem PC nicht konfiguriert.",
+        "log_sec_master_invalid_int": "Konfigurierte Master User ID ist keine gültige ganze Zahl.",
+        "log_sec_unauthorized_access": "UNAUTORISIERTES ZUGRIIFSVERSUCH: User-ID={user_id} ({username}) versuchte zu senden: '{preview}'",
+
+        # Log Messages — Credentials (credentials.py)
+        "log_fallback_read_error": "Konnte verschlüsselte Fallback-Anmeldedaten nicht lesen: {e}",
+        "log_keyring_save_error": "Keyring konnte '{key}' nicht speichern: {e}. Versuche DPAPI-Fallback...",
+        "log_dpapi_save_error": "Fehler beim Speichern der Anmeldedaten '{key}' im DPAPI-Fallback: {e}",
+        "log_keyring_load_debug": "Keyring-Ladeausnahme für '{key}': {e}",
+        "log_fallback_load_debug": "Fallback-Ladeausnahme für '{key}': {e}",
+
+        # Log Messages — Outlook Monitor (outlook_monitor.py)
+        "log_mail_config_error": "Fehler beim Laden der Mail-Benachrichtigungskonfiguration: {e}",
+        "log_mail_config_save_error": "Fehler beim Speichern der Mail-Benachrichtigungskonfiguration: {e}",
+        "log_mail_already_running": "OutlookMailMonitor läuft bereits.",
+        "log_mail_started": "OutlookMailMonitor gestartet. Benachrichtigungsschwelle: E-Mails nach {cutoff} lösen Warnungen aus.",
+        "log_mail_stopped": "OutlookMailMonitor gestoppt.",
+        "log_outlook_com_ok": "Outlook COM-Zugriff OK. Überwache Posteingang auf ungelesene Nachrichten.",
+        "log_cutoff_time": "Schwelle: E-Mails vor {cutoff} werden ignoriert.",
+        "log_polling_folder": "Polling {folder}: {count} ungelesene Nachricht(en).",
+        "log_mail_ignored_old": "E-Mail ignoriert (zu alt) in {folder}: '{subject}'",
+        "log_mail_keyword_match": "Übereinstimmende E-Mail gefunden in {folder}: '{subject}'",
+        "log_telegram_notify_sent": "Telegram-Benachrichtigung erfolgreich gesendet.",
+        "log_telegram_notify_failed": "Telegram-Benachrichtigung konnte nicht gesendet werden.",
+        "log_bot_manager_unavailable": "Bot-Manager nicht verfügbar, Benachrichtigung kann nicht gesendet werden.",
+        "log_outlook_processing_error": "Fehler beim Verarbeiten von Outlook-E-Mails: {e}",
+        "log_mail_thread_exit": "OutlookMailMonitor-Thread wird beendet.",
+        "log_outlook_com_error": "Kann nicht auf Outlook über COM zugreifen: {e}",
+
+        # Log Messages — GUI (gui.py)
+        "log_token_saved": "Telegram-API-Token konfiguriert und im Anmeldespeicher gespeichert.",
+        "log_master_saved": "Master User ID konfiguriert und gespeichert.",
+        "log_mail_keywords_updated": "Mail-Benachrichtigungsschlüsselwörter aktualisiert.",
+        "log_window_minimized": "Fenster in System Tray minimiert.",
+        "log_window_restored": "Fenster aus System Tray wiederhergestellt.",
+
+        # Log Messages — Tray (tray.py)
+        "log_tray_started": "System Tray gestartet.",
+        "log_tray_start_error": "System Tray konnte nicht gestartet werden: {e}",
+        "log_tray_icon_error": "Konnte Symboldatei {path} nicht laden: {e}",
+        "log_tray_stopped": "System Tray entfernt.",
+        "log_tray_show_error": "Fehler im Tray-'Anzeigen'-Handler: {e}",
+        "log_tray_exit_error": "Fehler im Tray-'Beenden'-Handler: {e}",
+
+        # Log Messages — System Commands (commands/system.py)
+        "log_error_shutdown_call": "Ausnahme während shutdown-Aufruf:",
+        "log_error_restart_call": "Ausnahme während restart-Aufruf:",
+        "log_error_shutdown_abort": "Ausnahme während shutdown /a-Aufruf:",
+        "log_error_lockworkstation": "Ausnahme während LockWorkStation:",
+
+        # Log Messages — Panic (commands/processes.py)
+        "log_panic_procedure": "PANIKVERFAHREN initiiert: Benutzeranwendungen werden beendet...",
+        "log_panic_terminating": "PANIC: Beende PID={pid} ({name})...",
+        "log_access_denied_terminate": "AccessDenied beim Versuch, PID {pid} zu beenden",
+        "log_exception_terminating": "Ausnahme beim Beenden von PID {proc}: {e}",
+        "log_resolve_hierarchy_error": "Konnte Prozesshierarchie nicht auflösen: {e}",
+
+        # Log Messages — Applications (commands/applications.py)
+        "log_firefox_not_found": "Firefox-Startversuch: Ausführbare Datei nicht gefunden.",
+        "log_firefox_start_error": "Fehler beim Starten von Firefox ({exe}):",
+        "log_outlook_not_found": "Outlook-Startversuch: Ausführbare Datei nicht gefunden.",
+        "log_outlook_start_error": "Fehler beim Starten von Outlook ({exe}):",
+        "log_notepad_note_error": "Fehler beim Öffnen von Notepad für Notiz:",
+
+        # Log Messages — Command Result Messages (commands/*.py)
+        "log_unhandled_error": "Nicht behandelte Fehler bei Befehlsausführung: {cmd}:",
+        "log_msg_shutdown_scheduled": "Shutdown in {delay}s geplant.",
+        "log_msg_shutdown_error": "Shutdown-Fehler: {err}",
+        "log_msg_shutdown_exception": "Shutdown-Ausnahme: {e}",
+        "log_msg_restart_scheduled": "Neustart in {delay}s geplant.",
+        "log_msg_restart_error": "Neustart-Fehler: {err}",
+        "log_msg_restart_exception": "Neustart-Ausnahme: {e}",
+        "log_msg_abort_done": "Shutdown/Neustart abgebrochen.",
+        "log_msg_abort_none": "Shutdown-Abbrechen versucht: keine ausstehende Operation.",
+        "log_msg_abort_exception": "Abbruch-Ausnahme: {e}",
+        "log_msg_lock_success": "Arbeitsstation erfolgreich gesperrt.",
+        "log_msg_lock_failed": "LockWorkStation fehlgeschlagen mit Code {code}.",
+        "log_msg_lock_exception": "LockWorkStation-Ausnahme: {e}",
+        "log_msg_ping": "Ping beantwortet. Uptime: {uptime}",
+        "log_msg_status": "Status-Befehl erfolgreich ausgeführt.",
+        "log_msg_help": "Befehlshilfe gesendet.",
+        "log_msg_panic_done": "Panic ausgeführt: {terminated} Prozesse beendet, {denied} geschützt.",
+        "log_msg_firefox_not_found": "Firefox nicht gefunden.",
+        "log_msg_firefox_launched": "Firefox gestartet von: {exe}",
+        "log_msg_firefox_error": "Firefox-Startfehler: {e}",
+        "log_msg_outlook_not_found": "Outlook nicht gefunden.",
+        "log_msg_outlook_launched": "Outlook gestartet von: {exe}",
+        "log_msg_outlook_error": "Outlook-Startfehler: {e}",
+        "log_msg_note_opened": "Notepad geöffnet mit Notiz: '{preview}'",
+        "log_msg_note_error": "Notepad-Startfehler: {e}",
+        "log_msg_note_empty": "Versuch, leere Notiz zu öffnen.",
+        "log_error_internal": "Interner Fehler in {cmd}: {e}",
+
+        # Log Messages — Icons (icons.py)
+        "log_icon_generate_error": "Symbol konnte nicht generiert werden {name}: {e}",
+        "log_icon_not_found": "Symboldatei nicht gefunden: {path}",
+        "log_icon_load_error": "Fehler beim Laden des_symbols '{name}' von {path}: {e}",
+
+        # Log Messages — Startup (startup.py)
+        "log_startup_enabled": "Windows-Start aktiviert: {cmd}",
+        "log_startup_enable_error": "Fehler beim Aktivieren des Windows-Starts: {e}",
+        "log_startup_disabled": "Windows-Start deaktiviert.",
+        "log_startup_disable_error": "Fehler beim Deaktivieren des Windows-Starts: {e}",
     },
     "es": {
         # Header & Status
@@ -373,6 +661,150 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         # Tray
         "tray_show": "Mostrar BotMyPC",
         "tray_exit": "Salir",
+
+        # Log Messages — Application Lifecycle (main.py)
+        "log_started": "{app_name} v{version} iniciado en Windows 11.",
+        "log_credentials_status": "Credenciales: Token Bot {token}, Master ID {master}.",
+        "log_token_present": "PRESENTES",
+        "log_token_missing": "FALTAN",
+        "log_shutdown_start": "Iniciando secuencia de cierre ordenada...",
+        "log_error_stopping_bot": "Error al detener el bot: {e}",
+        "log_error_stopping_mail": "Error al detener el monitor de correo: {e}",
+        "log_error_stopping_tray": "Error al cerrar la bandeja: {e}",
+        "log_shutdown_done": "Cierre de aplicación completado.",
+        "log_unexpected_error": "Error inesperado en el bucle principal de la GUI: {e}",
+
+        # Log Messages — i18n (i18n.py)
+        "log_language_set": "Idioma actualizado a '{lang}' y guardado en configuración.",
+
+        # Log Messages — Telegram Bot (telegram_bot.py)
+        "log_bot_state": "Estado del bot: {state}",
+        "log_state_change_error": "Error al invocar on_state_change: {e}",
+        "log_bot_already_running": "Intento de iniciar el bot cuando ya está en ejecución.",
+        "log_bot_token_missing": "No se puede iniciar el bot: Token no configurado.",
+        "log_bot_token_missing_gui": "[ERROR] Token del Bot no configurado. Configúrelo antes de iniciar.",
+        "log_bot_stopping": "Deteniendo bot...",
+        "log_bot_stopped": "Bot detenido correctamente.",
+        "log_send_not_running": "send_message: bot no iniciado, no se puede enviar.",
+        "log_send_master_unconfigured": "send_message: Master User ID no configurado.",
+        "log_send_master_invalid": "send_message: Master User ID no válido.",
+        "log_markdown_failed": "send_message: envío con Markdown fallido, reintentando texto plano: {e}",
+        "log_send_fallback_failed": "send_message: envío de respaldo fallido: {e2}",
+        "log_send_error": "send_message: error durante el envío: {e}",
+        "log_fatal_bot_error": "Error fatal en el hilo del bot de Telegram: {e}",
+        "log_bot_started": "Bot de Telegram iniciado y escuchando.",
+        "log_telegram_startup_error": "Error de inicio/conexión de Telegram: {e}",
+        "log_closing_telegram": "Cerrando actualizador y aplicación de Telegram...",
+        "log_invalid_command": "Comando no válido rechazado: '{cmd}' ({err})",
+        "log_dup_command": "Comando duplicado ignorado para ID {sender_id}: '{cmd}'",
+        "log_cmd_received": "Comando recibido del Master: /{cmd} {arg}",
+        "log_unknown_command": "Comando desconocido: '{cmd}'",
+        "log_command_result": "Resultado del comando {cmd}: {msg}",
+
+        # Log Messages — Security (security.py)
+        "log_sec_master_unconfigured": "Actualización de Telegram rechazada: Master User ID no está configurado en este PC.",
+        "log_sec_master_invalid_int": "La Master User ID configurada no es un entero válido.",
+        "log_sec_unauthorized_access": "INTENTO DE ACCESO NO AUTORIZADO: User ID={user_id} ({username}) intentó enviar: '{preview}'",
+
+        # Log Messages — Credentials (credentials.py)
+        "log_fallback_read_error": "No se pudieron leer credenciales de respaldo encriptadas: {e}",
+        "log_keyring_save_error": "Keyring no pudo guardar '{key}': {e}. Intentando fallback DPAPI...",
+        "log_dpapi_save_error": "Error al guardar la credencial '{key}' en fallback DPAPI: {e}",
+        "log_keyring_load_debug": "Excepción de carga de keyring para '{key}': {e}",
+        "log_fallback_load_debug": "Excepción de carga de fallback para '{key}': {e}",
+
+        # Log Messages — Outlook Monitor (outlook_monitor.py)
+        "log_mail_config_error": "Error al cargar la configuración de notificación de correo: {e}",
+        "log_mail_config_save_error": "Error al guardar la configuración de notificación de correo: {e}",
+        "log_mail_already_running": "OutlookMailMonitor ya está en ejecución.",
+        "log_mail_started": "OutlookMailMonitor iniciado. Corte de notificación: correos recibidos después de {cutoff} activarán alertas.",
+        "log_mail_stopped": "OutlookMailMonitor detenido.",
+        "log_outlook_com_ok": "Acceso COM de Outlook correcto. Monitoreando Bandeja de entrada para mensajes no leídos.",
+        "log_cutoff_time": "Corte: correos recibidos antes de {cutoff} serán ignorados.",
+        "log_polling_folder": "Sondaje {folder}: {count} mensaje(s) no leído(s).",
+        "log_mail_ignored_old": "Correo ignorado (demasiado antiguo) en {folder}: '{subject}'",
+        "log_mail_keyword_match": "Correo coincidente encontrado en {folder}: '{subject}'",
+        "log_telegram_notify_sent": "Notificación de Telegram enviada correctamente.",
+        "log_telegram_notify_failed": "Error al enviar notificación de Telegram.",
+        "log_bot_manager_unavailable": "Administrador de bot no disponible, no se puede enviar notificación.",
+        "log_outlook_processing_error": "Error al procesar correos de Outlook: {e}",
+        "log_mail_thread_exit": "Hilo de OutlookMailMonitor terminando.",
+        "log_outlook_com_error": "No se puede acceder a Outlook mediante COM: {e}",
+
+        # Log Messages — GUI (gui.py)
+        "log_token_saved": "Token de API de Telegram configurado y guardado en el almacenamiento de credenciales.",
+        "log_master_saved": "Master User ID configurado y guardado.",
+        "log_mail_keywords_updated": "Palabras clave de notificación de correo actualizadas.",
+        "log_window_minimized": "Ventana minimizada a System Tray.",
+        "log_window_restored": "Ventana restaurada desde System Tray.",
+
+        # Log Messages — Tray (tray.py)
+        "log_tray_started": "System Tray iniciada.",
+        "log_tray_start_error": "No se pudo iniciar el System Tray: {e}",
+        "log_tray_icon_error": "No se pudo cargar el archivo de icono {path}: {e}",
+        "log_tray_stopped": "System Tray eliminada.",
+        "log_tray_show_error": "Error en el manejador 'Mostrar' de la bandeja: {e}",
+        "log_tray_exit_error": "Error en el manejador 'Salir' de la bandeja: {e}",
+
+        # Log Messages — System Commands (commands/system.py)
+        "log_error_shutdown_call": "Excepción durante la llamada a shutdown:",
+        "log_error_restart_call": "Excepción durante la llamada a restart:",
+        "log_error_shutdown_abort": "Excepción durante la llamada a shutdown /a:",
+        "log_error_lockworkstation": "Excepción durante LockWorkStation:",
+
+        # Log Messages — Panic (commands/processes.py)
+        "log_panic_procedure": "PROCEDIMIENTO DE PÁNICO INICIADO: Terminando aplicaciones de usuario...",
+        "log_panic_terminating": "Pánico terminando PID={pid} ({name})...",
+        "log_access_denied_terminate": "AccessDenied al intentar terminar PID {pid}",
+        "log_exception_terminating": "Excepción al terminar PID {proc}: {e}",
+        "log_resolve_hierarchy_error": "No se pudo resolver la jerarquía de procesos: {e}",
+
+        # Log Messages — Applications (commands/applications.py)
+        "log_firefox_not_found": "Intento de lanzar Firefox: ejecutable no encontrado.",
+        "log_firefox_start_error": "Error al lanzar Firefox ({exe}):",
+        "log_outlook_not_found": "Intento de lanzar Outlook: ejecutable no encontrado.",
+        "log_outlook_start_error": "Error al lanzar Outlook ({exe}):",
+        "log_notepad_note_error": "Error al abrir Notepad para la nota:",
+
+        # Log Messages — Command Result Messages (commands/*.py)
+        "log_unhandled_error": "Error no controlado en la ejecución del comando: {cmd}:",
+        "log_msg_shutdown_scheduled": "Apagado programado en {delay}s.",
+        "log_msg_shutdown_error": "Error de apagado: {err}",
+        "log_msg_shutdown_exception": "Excepción de apagado: {e}",
+        "log_msg_restart_scheduled": "Reinicio programado en {delay}s.",
+        "log_msg_restart_error": "Error de reinicio: {err}",
+        "log_msg_restart_exception": "Excepción de reinicio: {e}",
+        "log_msg_abort_done": "Apagado/Reinicio cancelado.",
+        "log_msg_abort_none": "Intento de cancelar apagado: sin operación pendiente.",
+        "log_msg_abort_exception": "Excepción de cancelación: {e}",
+        "log_msg_lock_success": "Estación de trabajo bloqueada correctamente.",
+        "log_msg_lock_failed": "LockWorkStation falló con código {code}.",
+        "log_msg_lock_exception": "Excepción de LockWorkStation: {e}",
+        "log_msg_ping": "Ping respondido. Uptime: {uptime}",
+        "log_msg_status": "Comando de estado ejecutado correctamente.",
+        "log_msg_help": "Ayuda de comandos enviada.",
+        "log_msg_panic_done": "Pánico ejecutado: {terminated} procesos cerrados, {denied} protegidos.",
+        "log_msg_firefox_not_found": "Firefox no encontrado.",
+        "log_msg_firefox_launched": "Iniciado Firefox desde: {exe}",
+        "log_msg_firefox_error": "Error al lanzar Firefox: {e}",
+        "log_msg_outlook_not_found": "Outlook no encontrado.",
+        "log_msg_outlook_launched": "Iniciado Outlook desde: {exe}",
+        "log_msg_outlook_error": "Error al lanzar Outlook: {e}",
+        "log_msg_note_opened": "Abierto Notepad con nota: '{preview}'",
+        "log_msg_note_error": "Error al lanzar Notepad: {e}",
+        "log_msg_note_empty": "Intento de abrir nota vacía.",
+        "log_error_internal": "Error interno en {cmd}: {e}",
+
+        # Log Messages — Icons (icons.py)
+        "log_icon_generate_error": "Error al generar icono {name}: {e}",
+        "log_icon_not_found": "Archivo de icono no encontrado: {path}",
+        "log_icon_load_error": "Error al cargar icono '{name}' desde {path}: {e}",
+
+        # Log Messages — Startup (startup.py)
+        "log_startup_enabled": "Inicio con Windows habilitado: {cmd}",
+        "log_startup_enable_error": "Error al habilitar inicio con Windows: {e}",
+        "log_startup_disabled": "Inicio con Windows deshabilitado.",
+        "log_startup_disable_error": "Error al deshabilitar inicio con Windows: {e}",
     },
     "it": {
         # Header & Status
@@ -488,6 +920,150 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         # Tray
         "tray_show": "Mostra BotMyPC",
         "tray_exit": "Esci",
+
+        # Log Messages — Application Lifecycle (main.py)
+        "log_started": "{app_name} v{version} avviato su Windows 11.",
+        "log_credentials_status": "Credenziali: Bot Token {token}, Master ID {master}.",
+        "log_token_present": "PRESENTE",
+        "log_token_missing": "ASSENTE",
+        "log_shutdown_start": "Avvio sequenza di chiusura ordinata...",
+        "log_error_stopping_bot": "Errore durante l'arresto del bot: {e}",
+        "log_error_stopping_mail": "Errore durante l'arresto del monitor mail: {e}",
+        "log_error_stopping_tray": "Errore durante la chiusura della tray: {e}",
+        "log_shutdown_done": "Chiusura applicazione completata.",
+        "log_unexpected_error": "Errore imprevisto nel mainloop della GUI: {e}",
+
+        # Log Messages — i18n (i18n.py)
+        "log_language_set": "Lingua aggiornata a '{lang}' e salvata nelle impostazioni.",
+
+        # Log Messages — Telegram Bot (telegram_bot.py)
+        "log_bot_state": "Stato bot: {state}",
+        "log_state_change_error": "Errore durante l'invocazione di on_state_change: {e}",
+        "log_bot_already_running": "Tentativo di avviare il bot quando è già in esecuzione.",
+        "log_bot_token_missing": "Impossibile avviare il bot: Token non configurato.",
+        "log_bot_token_missing_gui": "[ERRORE] Bot Token non configurato. Configuralo prima di avviare.",
+        "log_bot_stopping": "Arresto del bot in corso...",
+        "log_bot_stopped": "Bot arrestato con successo.",
+        "log_send_not_running": "send_message: bot non avviato, impossibile inviare.",
+        "log_send_master_unconfigured": "send_message: Master User ID non configurato.",
+        "log_send_master_invalid": "send_message: Master User ID non valido.",
+        "log_markdown_failed": "send_message: invio con Markdown fallito, riprovo plain text: {e}",
+        "log_send_fallback_failed": "send_message: invio fallback fallito: {e2}",
+        "log_send_error": "send_message: errore durante l'invio: {e}",
+        "log_fatal_bot_error": "Errore fatale nel thread del bot Telegram: {e}",
+        "log_bot_started": "Bot Telegram avviato e in ascolto.",
+        "log_telegram_startup_error": "Errore di avvio/connessione Telegram: {e}",
+        "log_closing_telegram": "Chiusura updater e applicazione Telegram...",
+        "log_invalid_command": "Comando non valido rifiutato: '{cmd}' ({err})",
+        "log_dup_command": "Comando duplicato ignorato per ID {sender_id}: '{cmd}'",
+        "log_cmd_received": "Comando ricevuto da Master: /{cmd} {arg}",
+        "log_unknown_command": "Comando sconosciuto: '{cmd}'",
+        "log_command_result": "Esito comando {cmd}: {msg}",
+
+        # Log Messages — Security (security.py)
+        "log_sec_master_unconfigured": "Aggiornamento Telegram respinto: Master User ID non configurato su questo PC.",
+        "log_sec_master_invalid_int": "La Master User ID configurata non è un numero intero valido.",
+        "log_sec_unauthorized_access": "TENTATIVO DI ACCESSO NON AUTORIZZATO: User ID={user_id} ({username}) ha tentato di inviare: '{preview}'",
+
+        # Log Messages — Credentials (credentials.py)
+        "log_fallback_read_error": "Impossibile leggere credenziali di fallback crittografate: {e}",
+        "log_keyring_save_error": "Keyring non ha salvato '{key}': {e}. Provo fallback DPAPI...",
+        "log_dpapi_save_error": "Fallito il salvataggio della credenziale '{key}' nel fallback DPAPI: {e}",
+        "log_keyring_load_debug": "Eccezione keyring durante il caricamento per '{key}': {e}",
+        "log_fallback_load_debug": "Eccezione fallback caricamento per '{key}': {e}",
+
+        # Log Messages — Outlook Monitor (outlook_monitor.py)
+        "log_mail_config_error": "Errore durante il caricamento della configurazione mail notify: {e}",
+        "log_mail_config_save_error": "Errore durante il salvataggio della configurazione mail notify: {e}",
+        "log_mail_already_running": "OutlookMailMonitor già in esecuzione.",
+        "log_mail_started": "OutlookMailMonitor avviato. Cutoff notifiche: le mail ricevute dopo {cutoff} genereranno avvisi.",
+        "log_mail_stopped": "OutlookMailMonitor arrestato.",
+        "log_outlook_com_ok": "Accesso Outlook COM OK. Monitoraggio Inbox per messaggi non letti.",
+        "log_cutoff_time": "Cutoff: le mail ricevute prima di {cutoff} verranno ignorate.",
+        "log_polling_folder": "Polling {folder}: {count} messaggio(i) non letto(i).",
+        "log_mail_ignored_old": "Mail ignorata (troppo vecchia) in {folder}: '{subject}'",
+        "log_mail_keyword_match": "Mail corrispondente a keyword trovata in {folder}: '{subject}'",
+        "log_telegram_notify_sent": "Notifica Telegram inviata con successo.",
+        "log_telegram_notify_failed": "Invio notifica Telegram fallito.",
+        "log_bot_manager_unavailable": "Bot manager non disponibile, impossibile inviare notifica.",
+        "log_outlook_processing_error": "Errore durante l'elaborazione delle mail di Outlook: {e}",
+        "log_mail_thread_exit": "Thread OutlookMailMonitor in chiusura.",
+        "log_outlook_com_error": "Impossibile accedere a Outlook tramite COM: {e}",
+
+        # Log Messages — GUI (gui.py)
+        "log_token_saved": "Token API Telegram configurato e salvato nel credential storage.",
+        "log_master_saved": "Master User ID configurato e salvato.",
+        "log_mail_keywords_updated": "Keywords di notifica mail aggiornate.",
+        "log_window_minimized": "Finestra minimizzata nella System Tray.",
+        "log_window_restored": "Finestra ripristinata dalla System Tray.",
+
+        # Log Messages — Tray (tray.py)
+        "log_tray_started": "System Tray avviata.",
+        "log_tray_start_error": "Impossibile avviare la System Tray: {e}",
+        "log_tray_icon_error": "Impossibile caricare il file icona {path}: {e}",
+        "log_tray_stopped": "System Tray rimossa.",
+        "log_tray_show_error": "Errore handler 'Mostra' da tray: {e}",
+        "log_tray_exit_error": "Errore handler 'Esci' da tray: {e}",
+
+        # Log Messages — System Commands (commands/system.py)
+        "log_error_shutdown_call": "Eccezione durante la chiamata a shutdown:",
+        "log_error_restart_call": "Eccezione durante la chiamata a restart:",
+        "log_error_shutdown_abort": "Eccezione durante la chiamata a shutdown /a:",
+        "log_error_lockworkstation": "Eccezione durante LockWorkStation:",
+
+        # Log Messages — Panic (commands/processes.py)
+        "log_panic_procedure": "PROCEDURA PANICO AVVIO: Terminazione delle applicazioni utente...",
+        "log_panic_terminating": "Panic terminando PID={pid} ({name})...",
+        "log_access_denied_terminate": "AccessDenied durante il tentativo di terminare PID {pid}",
+        "log_exception_terminating": "Eccezione durante la terminazione di PID {proc}: {e}",
+        "log_resolve_hierarchy_error": "Impossibile risolvere la gerarchia dei processi: {e}",
+
+        # Log Messages — Applications (commands/applications.py)
+        "log_firefox_not_found": "Tentativo di avvio Firefox: eseguibile non trovato.",
+        "log_firefox_start_error": "Errore durante l'avvio di Firefox ({exe}):",
+        "log_outlook_not_found": "Tentativo di avvio Outlook: eseguibile non trovato.",
+        "log_outlook_start_error": "Errore durante l'avvio di Outlook ({exe}):",
+        "log_notepad_note_error": "Errore durante l'apertura di Notepad per la nota:",
+
+        # Log Messages — Command Result Messages (commands/*.py)
+        "log_unhandled_error": "Errore non gestito nell'esecuzione di {cmd}:",
+        "log_msg_shutdown_scheduled": "Shutdown programmato tra {delay}s.",
+        "log_msg_shutdown_error": "Errore shutdown: {err}",
+        "log_msg_shutdown_exception": "Eccezione shutdown: {e}",
+        "log_msg_restart_scheduled": "Riavvio programmato tra {delay}s.",
+        "log_msg_restart_error": "Errore riavvio: {err}",
+        "log_msg_restart_exception": "Eccezione riavvio: {e}",
+        "log_msg_abort_done": "Shutdown/Riavvio annullato.",
+        "log_msg_abort_none": "Tentativo di annullamento shutdown: nessuna operazione in corso.",
+        "log_msg_abort_exception": "Eccezione annulla: {e}",
+        "log_msg_lock_success": "Workstation bloccata con successo.",
+        "log_msg_lock_failed": "LockWorkStation fallito con codice {code}.",
+        "log_msg_lock_exception": "Eccezione LockWorkStation: {e}",
+        "log_msg_ping": "Ping risposto. Uptime: {uptime}",
+        "log_msg_status": "Comando status eseguito con successo.",
+        "log_msg_help": "Guida comandi inviata.",
+        "log_msg_panic_done": "Panic eseguito: {terminated} processi chiusi, {denied} protetti.",
+        "log_msg_firefox_not_found": "Firefox non trovato.",
+        "log_msg_firefox_launched": "Avviato Firefox da: {exe}",
+        "log_msg_firefox_error": "Errore lancio Firefox: {e}",
+        "log_msg_outlook_not_found": "Outlook non trovato.",
+        "log_msg_outlook_launched": "Avviato Outlook da: {exe}",
+        "log_msg_outlook_error": "Errore lancio Outlook: {e}",
+        "log_msg_note_opened": "Aperto Notepad con nota: '{preview}'",
+        "log_msg_note_error": "Errore lancio Notepad: {e}",
+        "log_msg_note_empty": "Tentativo di aprire nota vuota.",
+        "log_error_internal": "Errore interno in {cmd}: {e}",
+
+        # Log Messages — Icons (icons.py)
+        "log_icon_generate_error": "Errore durante la generazione dell'icona {name}: {e}",
+        "log_icon_not_found": "File icona non trovato: {path}",
+        "log_icon_load_error": "Errore durante il caricamento dell'icona '{name}' da {path}: {e}",
+
+        # Log Messages — Startup (startup.py)
+        "log_startup_enabled": "Avvio automatico con Windows abilitato: {cmd}",
+        "log_startup_enable_error": "Errore durante l'abilitazione dell'avvio con Windows: {e}",
+        "log_startup_disabled": "Avvio automatico con Windows disabilitato.",
+        "log_startup_disable_error": "Errore durante la disabilitazione dell'avvio con Windows: {e}",
     },
     "fr": {
         # Header & Status
@@ -603,6 +1179,150 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         # Tray
         "tray_show": "Afficher BotMyPC",
         "tray_exit": "Quitter",
+
+        # Log Messages — Application Lifecycle (main.py)
+        "log_started": "{app_name} v{version} démarré sur Windows 11.",
+        "log_credentials_status": "Identifiants: Jeton Bot {token}, Master ID {master}.",
+        "log_token_present": "PRÉSENT",
+        "log_token_missing": "MANQUANT",
+        "log_shutdown_start": "Démarrage de la séquence d'arrêt ordonnée...",
+        "log_error_stopping_bot": "Erreur lors de l'arrêt du bot: {e}",
+        "log_error_stopping_mail": "Erreur lors de l'arrêt du moniteur de courriel: {e}",
+        "log_error_stopping_tray": "Erreur lors de la fermeture du systray: {e}",
+        "log_shutdown_done": "Fermeture de l'application terminée.",
+        "log_unexpected_error": "Erreur inattendue dans la boucle principale de la GUI: {e}",
+
+        # Log Messages — i18n (i18n.py)
+        "log_language_set": "Langue mise à jour vers '{lang}' et enregistrée dans les paramètres.",
+
+        # Log Messages — Telegram Bot (telegram_bot.py)
+        "log_bot_state": "État du bot: {state}",
+        "log_state_change_error": "Erreur lors de l'appel de on_state_change: {e}",
+        "log_bot_already_running": "Tentative de démarrage du bot alors qu'il est déjà en cours.",
+        "log_bot_token_missing": "Impossible de démarrer le bot: Jeton non configuré.",
+        "log_bot_token_missing_gui": "[ERREUR] Jeton du Bot non configuré. Configurez-le avant de démarrer.",
+        "log_bot_stopping": "Arrêt du bot en cours...",
+        "log_bot_stopped": "Bot arrêté avec succès.",
+        "log_send_not_running": "send_message: bot non démarré, impossible d'envoyer.",
+        "log_send_master_unconfigured": "send_message: Master User ID non configuré.",
+        "log_send_master_invalid": "send_message: Master User ID non valide.",
+        "log_markdown_failed": "send_message: envoi en Markdown échoué, réessayer en texte brut: {e}",
+        "log_send_fallback_failed": "send_message: envoi de secours échoué: {e2}",
+        "log_send_error": "send_message: erreur lors de l'envoi: {e}",
+        "log_fatal_bot_error": "Erreur fatale dans le thread du bot Telegram: {e}",
+        "log_bot_started": "Bot Telegram démarré et en écoute.",
+        "log_telegram_startup_error": "Erreur de démarrage/connexion Telegram: {e}",
+        "log_closing_telegram": "Fermeture du gestionnaire de mise à jour et de l'application Telegram...",
+        "log_invalid_command": "Commande non valide rejetée: '{cmd}' ({err})",
+        "log_dup_command": "Commande dupliquée ignorée pour ID {sender_id}: '{cmd}'",
+        "log_cmd_received": "Commande reçue du Master: /{cmd} {arg}",
+        "log_unknown_command": "Commande inconnue: '{cmd}'",
+        "log_command_result": "Résultat de la commande {cmd}: {msg}",
+
+        # Log Messages — Security (security.py)
+        "log_sec_master_unconfigured": "Mise à jour Telegram rejetée: Master User ID n'est pas configuré sur cet ordinateur.",
+        "log_sec_master_invalid_int": "La Master User ID configurée n'est pas un entier valide.",
+        "log_sec_unauthorized_access": "TENTATIVE D'ACCÈS NON AUTORISÉ: User ID={user_id} ({username}) a tenté d'envoyer: '{preview}'",
+
+        # Log Messages — Credentials (credentials.py)
+        "log_fallback_read_error": "Impossible de lire les identifiants de secours chiffrés: {e}",
+        "log_keyring_save_error": "Keyring n'a pas pué sauvegarder '{key}': {e}. Tentative de secours DPAPI...",
+        "log_dpapi_save_error": "Échec de la sauvegarde de l'identifiant '{key}' dans le secours DPAPI: {e}",
+        "log_keyring_load_debug": "Exception de chargement keyring pour '{key}': {e}",
+        "log_fallback_load_debug": "Exception de chargement de secours pour '{key}': {e}",
+
+        # Log Messages — Outlook Monitor (outlook_monitor.py)
+        "log_mail_config_error": "Erreur lors du chargement de la configuration de notification par e-mail: {e}",
+        "log_mail_config_save_error": "Erreur lors de l'enregistrement de la configuration de notification par e-mail: {e}",
+        "log_mail_already_running": "OutlookMailMonitor est déjà en cours d'exécution.",
+        "log_mail_started": "OutlookMailMonitor démarré. Seuil de notification: les courriels reçus après {cutoff} déclencheront des alertes.",
+        "log_mail_stopped": "OutlookMailMonitor arrêté.",
+        "log_outlook_com_ok": "Accès COM Outlook OK. Surveillance de la Boîte de réception pour les messages non lus.",
+        "log_cutoff_time": "Seuil: les courriels reçus avant {cutoff} seront ignorés.",
+        "log_polling_folder": "Sondage {folder}: {count} message(s) non lu(s).",
+        "log_mail_ignored_old": "Courriel ignoré (trop ancien) dans {folder}: '{subject}'",
+        "log_mail_keyword_match": "Courriel correspondant trouvé dans {folder}: '{subject}'",
+        "log_telegram_notify_sent": "Notification Telegram envoyée avec succès.",
+        "log_telegram_notify_failed": "Échec de l'envoi de la notification Telegram.",
+        "log_bot_manager_unavailable": "Gestionnaire de bot non disponible, impossible d'envoyer la notification.",
+        "log_outlook_processing_error": "Erreur lors du traitement des courriels Outlook: {e}",
+        "log_mail_thread_exit": "Thread OutlookMailMonitor en cours de fermeture.",
+        "log_outlook_com_error": "Impossible d'accéder à Outlook via COM: {e}",
+
+        # Log Messages — GUI (gui.py)
+        "log_token_saved": "Jeton API Telegram configuré et enregistré dans le coffre de mots de passe.",
+        "log_master_saved": "Master User ID configuré et enregistré.",
+        "log_mail_keywords_updated": "Mots-clés de notification par e-mail mis à jour.",
+        "log_window_minimized": "Fenêtre minimisée dans la System Tray.",
+        "log_window_restored": "Fenêtre restaurée depuis la System Tray.",
+
+        # Log Messages — Tray (tray.py)
+        "log_tray_started": "System Tray démarrée.",
+        "log_tray_start_error": "Impossible de démarrer la System Tray: {e}",
+        "log_tray_icon_error": "Impossible de charger le fichier d'icône {path}: {e}",
+        "log_tray_stopped": "System Tray supprimée.",
+        "log_tray_show_error": "Erreur dans le gestionnaire 'Afficher' de la bande-passante: {e}",
+        "log_tray_exit_error": "Erreur dans le gestionnaire 'Quitter' de la bande-passante: {e}",
+
+        # Log Messages — System Commands (commands/system.py)
+        "log_error_shutdown_call": "Exception pendant l'appel à shutdown:",
+        "log_error_restart_call": "Exception pendant l'appel à restart:",
+        "log_error_shutdown_abort": "Exception pendant l'appel à shutdown /a:",
+        "log_error_lockworkstation": "Exception pendant LockWorkStation:",
+
+        # Log Messages — Panic (commands/processes.py)
+        "log_panic_procedure": "PROCÉDURE DE PANIQUE DÉCLANCHÉE: Fermeture des applications utilisateur...",
+        "log_panic_terminating": "Panic: terminaison du PID={pid} ({name})...",
+        "log_access_denied_terminate": "AccessDenied lors de la tentative de terminer le PID {pid}",
+        "log_exception_terminating": "Exception lors de la terminaison du PID {proc}: {e}",
+        "log_resolve_hierarchy_error": "Impossible de résoudre la hiérarchie des processus: {e}",
+
+        # Log Messages — Applications (commands/applications.py)
+        "log_firefox_not_found": "Tentative de lancement de Firefox: exécutable introuvable.",
+        "log_firefox_start_error": "Erreur lors du lancement de Firefox ({exe}):",
+        "log_outlook_not_found": "Tentative de lancement d'Outlook: exécutable introuvable.",
+        "log_outlook_start_error": "Erreur lors du lancement d'Outlook ({exe}):",
+        "log_notepad_note_error": "Erreur lors de l'ouverture de Notepad pour la note:",
+
+        # Log Messages — Command Result Messages (commands/*.py)
+        "log_unhandled_error": "Erreur non gérée dans l'exécution de la commande: {cmd}:",
+        "log_msg_shutdown_scheduled": "Arrêt planifié dans {delay}s.",
+        "log_msg_shutdown_error": "Erreur d'arrêt: {err}",
+        "log_msg_shutdown_exception": "Exception d'arrêt: {e}",
+        "log_msg_restart_scheduled": "Redémarrage planifié dans {delay}s.",
+        "log_msg_restart_error": "Erreur de redémarrage: {err}",
+        "log_msg_restart_exception": "Exception de redémarrage: {e}",
+        "log_msg_abort_done": "Arrêt/Redémarrage annulé.",
+        "log_msg_abort_none": "Tentative d'annulation d'arrêt: aucune opération en cours.",
+        "log_msg_abort_exception": "Exception d'annulation: {e}",
+        "log_msg_lock_success": "Station de travail verrouillée avec succès.",
+        "log_msg_lock_failed": "LockWorkStation échoué avec le code {code}.",
+        "log_msg_lock_exception": "Exception de LockWorkStation: {e}",
+        "log_msg_ping": "Ping répondu. Uptime: {uptime}",
+        "log_msg_status": "Commande status exécutée avec succès.",
+        "log_msg_help": "Aide des commandes envoyée.",
+        "log_msg_panic_done": "Pánique exécutée: {terminated} processus fermés, {denied} protégés.",
+        "log_msg_firefox_not_found": "Firefox non trouvé.",
+        "log_msg_firefox_launched": "Firefox lancé depuis: {exe}",
+        "log_msg_firefox_error": "Erreur de lancement de Firefox: {e}",
+        "log_msg_outlook_not_found": "Outlook non trouvé.",
+        "log_msg_outlook_launched": "Outlook lancé depuis: {exe}",
+        "log_msg_outlook_error": "Erreur de lancement d'Outlook: {e}",
+        "log_msg_note_opened": "Notepad ouvert avec la note: '{preview}'",
+        "log_msg_note_error": "Erreur de lancement de Notepad: {e}",
+        "log_msg_note_empty": "Tentative d'ouvrir une note vide.",
+        "log_error_internal": "Erreur interne dans {cmd}: {e}",
+
+        # Log Messages — Icons (icons.py)
+        "log_icon_generate_error": "Échec de la génération de l'icône {name}: {e}",
+        "log_icon_not_found": "Fichier d'icône introuvable: {path}",
+        "log_icon_load_error": "Erreur lors du chargement de l'icône '{name}' depuis {path}: {e}",
+
+        # Log Messages — Startup (startup.py)
+        "log_startup_enabled": "Démarrage avec Windows activé: {cmd}",
+        "log_startup_enable_error": "Erreur lors de l'activation du démarrage avec Windows: {e}",
+        "log_startup_disabled": "Démarrage avec Windows désactivé.",
+        "log_startup_disable_error": "Erreur lors de la désactivation du démarrage avec Windows: {e}",
     },
 }
 
@@ -709,7 +1429,7 @@ def set_language(lang_code: str) -> bool:
     settings["language"] = lang_code
     success = save_settings(settings)
     if success:
-        logger.info(f"Language updated to '{lang_code}' and saved to settings.")
+        logger.info(t("log_language_set", lang=lang_code))
     return success
 
 

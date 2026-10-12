@@ -22,6 +22,7 @@ from config import (
     PANIC_CONFIRMATION_SECONDS,
     MAX_LOG_MESSAGE_PREVIEW_LEN,
 )
+from i18n import t
 
 logger = logging.getLogger(APP_NAME)
 
@@ -235,21 +236,20 @@ class SecurityGateway:
         """
         master_id_str = self._get_master_user_id()
         if not master_id_str:
-            logger.warning("Telegram update rejected: Master User ID is not configured on this PC.")
+            logger.warning(t("log_sec_master_unconfigured"))
             return False, "❌ Master User ID non configurato sul computer locale."
 
         try:
             expected_master_id = int(master_id_str.strip())
         except ValueError:
-            logger.error("Configured Master User ID is not a valid integer.")
+            logger.error(t("log_sec_master_invalid_int"))
             return False, "❌ Configurazione Master User ID locale non valida."
 
         if user_id is None or user_id != expected_master_id:
             preview = (raw_message or "")[:MAX_LOG_MESSAGE_PREVIEW_LEN]
             user_display = f"@{username}" if username else "NoUsername"
             logger.warning(
-                f"UNAUTHORIZED ACCESS ATTEMPT: User ID={user_id} ({user_display}) "
-                f"tried to send: '{preview}'"
+                t("log_sec_unauthorized_access", user_id=user_id, username=user_display, preview=preview)
             )
             return False, "⛔ Accesso negato: Utente non autorizzato."
 
